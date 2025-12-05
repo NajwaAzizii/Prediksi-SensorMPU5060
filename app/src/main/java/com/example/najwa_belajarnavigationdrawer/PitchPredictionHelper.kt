@@ -19,7 +19,7 @@ class PitchPredictionHelper(private val context: Context) {
 
         val modelBytes = context.assets.open("pitch_model.onnx").readBytes()
         session = env.createSession(modelBytes)
-        Log.i("ONNX", "✅ Model ONNX dimuat")
+        Log.i("ONNX", "Model ONNX dimuat")
 
 
         val json = context.assets.open("scaler_params.json")
@@ -40,7 +40,6 @@ class PitchPredictionHelper(private val context: Context) {
         gyY: Float,
         gyZ: Float
     ): Float {
-
 
         val input = floatArrayOf(acX, acY, acZ, gyX, gyY, gyZ)
 
@@ -66,7 +65,7 @@ class PitchPredictionHelper(private val context: Context) {
         result.close()
         tensor.close()
 
-        Log.i("ONNX", "✅ OUTPUT = $output")
+        Log.i("ONNX", "OUTPUT = $output")
 
         return output
     }

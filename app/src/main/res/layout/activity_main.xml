@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient">
+    android:background="@drawable/bg_gradient"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,135 +12,329 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- HEADER -->
+        <!-- HEADER - Tombol Kembali -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp">
+            android:layout_marginBottom="16dp">
 
             <ImageView
                 android:id="@+id/btnKembali"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_alignParentStart="true"
                 android:src="@drawable/kembali"
-                />
-
-          <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="Input Data Sensor MPU6050"
-                android:textColor="@color/putih"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:padding="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="Kembali" />
         </RelativeLayout>
 
+        <!-- JUDUL -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Input Data Sensor MPU6050"
+            android:textColor="@color/putih"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp" />
+
+        <!-- SUBTITLE -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Masukkan nilai pembacaan sensor (offline):"
             android:textColor="@color/putih"
             android:textSize="14sp"
-            android:layout_marginBottom="16dp" />
-
-        <!-- INPUT FIELD -->
-        <EditText
-            android:id="@+id/etAcX"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:hint="AcX"
-            android:background="@android:color/white"
-            android:padding="10dp"
-            android:inputType="numberSigned"
-            android:layout_marginBottom="10dp" />
-
-        <EditText
-            android:id="@+id/etAcY"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:hint="AcY"
-            android:background="@android:color/white"
-            android:padding="10dp"
-            android:inputType="numberSigned"
-            android:layout_marginBottom="10dp" />
-
-        <EditText
-            android:id="@+id/etAcZ"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:hint="AcZ"
-            android:background="@android:color/white"
-            android:padding="10dp"
-            android:inputType="numberSigned"
-            android:layout_marginBottom="10dp" />
-
-        <EditText
-            android:id="@+id/etGyX"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:hint="GyX"
-            android:background="@android:color/white"
-            android:padding="10dp"
-            android:inputType="numberSigned"
-            android:layout_marginBottom="10dp" />
-
-        <EditText
-            android:id="@+id/etGyY"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:hint="GyY"
-            android:background="@android:color/white"
-            android:padding="10dp"
-            android:inputType="numberSigned"
-            android:layout_marginBottom="10dp" />
-
-        <EditText
-            android:id="@+id/etGyZ"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:hint="GyZ"
-            android:background="@android:color/white"
-            android:padding="10dp"
-            android:inputType="numberSigned"
             android:layout_marginBottom="24dp" />
 
-        <!-- TOMBOL -->
-        <Button
-            android:id="@+id/btnPredict"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Prediksi Sudut Kemiringan"
-            android:textAllCaps="false"
-            android:textColor="@color/putih"
-            android:backgroundTint="#3A8DFF"
-            android:layout_marginBottom="24dp" />
-
-        <!-- HASIL -->
+        <!-- INPUT FIELDS dengan Label di Samping -->
+        <!-- AcX -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:padding="16dp"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="14dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:text="Hasil Prediksi:"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:textColor="@color/hitam" />
+                android:text="AcX :"
+                android:textColor="@color/putih"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvResult"
-                android:layout_width="wrap_content"
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Sudut Kemiringan (Pitch °): -"
-                android:textSize="14sp"
-                android:textColor="@color/hitam"
-                android:layout_marginTop="4dp" />
+                android:layout_weight="1"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/putih">
+
+                <EditText
+                    android:id="@+id/etAcX"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:hint="Isi AcX disini"
+                    android:textColorHint="#B0B0B0"
+                    android:background="@android:color/transparent"
+                    android:paddingHorizontal="16dp"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:textColor="@color/hitam"
+                    android:textSize="16sp" />
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
+
+        <!-- AcY -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="14dp">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="AcY :"
+                android:textColor="@color/putih"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/putih">
+
+                <EditText
+                    android:id="@+id/etAcY"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:hint="Isi AcY disini"
+                    android:textColorHint="#B0B0B0"
+                    android:background="@android:color/transparent"
+                    android:paddingHorizontal="16dp"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:textColor="@color/hitam"
+                    android:textSize="16sp" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- AcZ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="14dp">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="AcZ :"
+                android:textColor="@color/putih"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/putih">
+
+                <EditText
+                    android:id="@+id/etAcZ"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:hint="Isi AcZ disini"
+                    android:textColorHint="#B0B0B0"
+                    android:background="@android:color/transparent"
+                    android:paddingHorizontal="16dp"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:textColor="@color/hitam"
+                    android:textSize="16sp" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- GyX -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="14dp">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="GyX :"
+                android:textColor="@color/putih"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/putih">
+
+                <EditText
+                    android:id="@+id/etGyX"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:hint="Isi GyX disini"
+                    android:textColorHint="#B0B0B0"
+                    android:background="@android:color/transparent"
+                    android:paddingHorizontal="16dp"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:textColor="@color/hitam"
+                    android:textSize="16sp" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- GyY -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="14dp">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="GyY :"
+                android:textColor="@color/putih"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/putih">
+
+                <EditText
+                    android:id="@+id/etGyY"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:hint="Isi GyY disini"
+                    android:textColorHint="#B0B0B0"
+                    android:background="@android:color/transparent"
+                    android:paddingHorizontal="16dp"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:textColor="@color/hitam"
+                    android:textSize="16sp" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- GyZ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="32dp">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="GyZ :"
+                android:textColor="@color/putih"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/putih">
+
+                <EditText
+                    android:id="@+id/etGyZ"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:hint="Isi GyZ disini"
+                    android:textColorHint="#B0B0B0"
+                    android:background="@android:color/transparent"
+                    android:paddingHorizontal="16dp"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:textColor="@color/hitam"
+                    android:textSize="16sp" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- TOMBOL PREDIKSI -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="6dp"
+            android:layout_marginBottom="32dp">
+
+            <Button
+                android:id="@+id/btnPredict"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:text="Prediksi Sudut Kemiringan"
+                android:textAllCaps="false"
+                android:textColor="@color/putih"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:backgroundTint="#3A9AE8"
+                android:paddingHorizontal="40dp"
+                android:elevation="0dp"
+                android:stateListAnimator="@null" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- HASIL PREDIKSI -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#E6FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hasil Prediksi:"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/hitam"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvResult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sudut Kemiringan (Pitch °): -"
+                    android:textSize="16sp"
+                    android:textColor="@color/hitam" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 </ScrollView>
