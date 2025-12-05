@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -10,22 +11,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NajwaBelajarNavigationDrawer">
+
+        <!-- HALAMAN UTAMA -->
         <activity
             android:name=".HalamanUtama"
             android:exported="true"
             android:label="Halaman Utama"
             android:theme="@style/Theme.NajwaBelajarNavigationDrawer" />
+
+        <!-- HALAMAN PREDIKSI (INI YANG TADI HILANG) -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <!-- VIEW PAGER -->
         <activity
             android:name=".ViewPager"
             android:exported="false" />
+
+        <!-- SPLASH / LAYAR PEMBUKA -->
         <activity
-            android:name=".MainActivity"
+            android:name=".LayarPembuka"
             android:exported="true"
             tools:ignore="DuplicateActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
     </application>
+
 </manifest>

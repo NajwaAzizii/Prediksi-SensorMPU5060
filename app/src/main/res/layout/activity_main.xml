@@ -1,74 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@drawable/bg_gradient">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Input Data Sensor MPU6050"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
-
-    <EditText
-        android:id="@+id/etAcX"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="AcX (LSB)"
-        android:inputType="numberDecimal|numberSigned"/>
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <EditText
-        android:id="@+id/etAcY"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="AcY (LSB)"
-        android:inputType="numberDecimal|numberSigned"/>
+        <!-- HEADER -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp">
 
-    <EditText
-        android:id="@+id/etAcZ"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="AcZ (LSB)"
-        android:inputType="numberDecimal|numberSigned"/>
+            <ImageView
+                android:id="@+id/btnKembali"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/kembali"
+                />
 
-    <EditText
-        android:id="@+id/etGyX"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="GyX (LSB)"
-        android:inputType="numberDecimal|numberSigned"/>
+          <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Input Data Sensor MPU6050"
+                android:textColor="@color/putih"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
-    <EditText
-        android:id="@+id/etGyY"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="GyY (LSB)"
-        android:inputType="numberDecimal|numberSigned"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Masukkan nilai pembacaan sensor (offline):"
+            android:textColor="@color/putih"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp" />
 
-    <EditText
-        android:id="@+id/etGyZ"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="GyZ (LSB)"
-        android:inputType="numberDecimal|numberSigned"/>
+        <!-- INPUT FIELD -->
+        <EditText
+            android:id="@+id/etAcX"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:hint="AcX"
+            android:background="@android:color/white"
+            android:padding="10dp"
+            android:inputType="numberSigned"
+            android:layout_marginBottom="10dp" />
 
-    <Button
-        android:id="@+id/btnPredict"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Prediksi Sudut Pitch"
-        android:layout_marginTop="16dp"/>
+        <EditText
+            android:id="@+id/etAcY"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:hint="AcY"
+            android:background="@android:color/white"
+            android:padding="10dp"
+            android:inputType="numberSigned"
+            android:layout_marginBottom="10dp" />
 
-    <TextView
-        android:id="@+id/tvResult"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hasil: -"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp"/>
+        <EditText
+            android:id="@+id/etAcZ"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:hint="AcZ"
+            android:background="@android:color/white"
+            android:padding="10dp"
+            android:inputType="numberSigned"
+            android:layout_marginBottom="10dp" />
 
-</LinearLayout>
+        <EditText
+            android:id="@+id/etGyX"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:hint="GyX"
+            android:background="@android:color/white"
+            android:padding="10dp"
+            android:inputType="numberSigned"
+            android:layout_marginBottom="10dp" />
+
+        <EditText
+            android:id="@+id/etGyY"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:hint="GyY"
+            android:background="@android:color/white"
+            android:padding="10dp"
+            android:inputType="numberSigned"
+            android:layout_marginBottom="10dp" />
+
+        <EditText
+            android:id="@+id/etGyZ"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:hint="GyZ"
+            android:background="@android:color/white"
+            android:padding="10dp"
+            android:inputType="numberSigned"
+            android:layout_marginBottom="24dp" />
+
+        <!-- TOMBOL -->
+        <Button
+            android:id="@+id/btnPredict"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Prediksi Sudut Kemiringan"
+            android:textAllCaps="false"
+            android:textColor="@color/putih"
+            android:backgroundTint="#3A8DFF"
+            android:layout_marginBottom="24dp" />
+
+        <!-- HASIL -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hasil Prediksi:"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/hitam" />
+
+            <TextView
+                android:id="@+id/tvResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sudut Kemiringan (Pitch °): -"
+                android:textSize="14sp"
+                android:textColor="@color/hitam"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

@@ -47,6 +47,7 @@ dependencies {
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.16.3")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10")
+    implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

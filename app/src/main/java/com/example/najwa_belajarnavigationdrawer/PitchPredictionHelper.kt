@@ -1,6 +1,7 @@
 package com.example.najwa_belajarnavigationdrawer
 
 import android.content.Context
+import android.util.Log
 import ai.onnxruntime.*
 import com.google.gson.Gson
 import java.io.BufferedReader
@@ -9,53 +10,26 @@ import java.nio.FloatBuffer
 
 class PitchPredictionHelper(private val context: Context) {
 
-    private var ortSession: OrtSession? = null
-    private var ortEnvironment: OrtEnvironment? = null
-    private var scalerParams: ScalerParams? = null
+    private val env: OrtEnvironment = OrtEnvironment.getEnvironment()
+    private val session: OrtSession
+    private val mean: FloatArray
+    private val scale: FloatArray
 
     init {
-        loadModel()
-        loadScalerParams()
-    }
 
-    private fun loadModel() {
-        try {
-            ortEnvironment = OrtEnvironment.getEnvironment()
+        val modelBytes = context.assets.open("pitch_model.onnx").readBytes()
+        session = env.createSession(modelBytes)
+        Log.i("ONNX", "✅ Model ONNX dimuat")
 
-            val modelBytes = context.assets.open("pitch_model.onnx").use {
-                it.readBytes()
-            }
 
-            ortSession = ortEnvironment?.createSession(modelBytes)
-            println("✓ Model ONNX berhasil dimuat")
-        } catch (e: Exception) {
-            e.printStackTrace()
-            println("✗ Gagal memuat model: ${e.message}")
-        }
-    }
+        val json = context.assets.open("scaler_params.json")
+            .bufferedReader().use { it.readText() }
 
-    private fun loadScalerParams() {
-        try {
-            val json = context.assets.open("scaler_params.json").use { inputStream ->
-                BufferedReader(InputStreamReader(inputStream)).use {
-                    it.readText()
-                }
-            }
+        val scaler = Gson().fromJson(json, ScalerParams::class.java)
+        mean = scaler.mean.map { it.toFloat() }.toFloatArray()
+        scale = scaler.scale.map { it.toFloat() }.toFloatArray()
 
-            scalerParams = Gson().fromJson(json, ScalerParams::class.java)
-            println("✓ Parameter scaler berhasil dimuat")
-        } catch (e: Exception) {
-            e.printStackTrace()
-            println("✗ Gagal memuat scaler: ${e.message}")
-        }
-    }
-
-    private fun normalize(input: FloatArray): FloatArray {
-        val params = scalerParams ?: return input
-
-        return FloatArray(input.size) { i ->
-            ((input[i] - params.mean[i].toFloat()) / params.scale[i].toFloat())
-        }
+        Log.i("ONNX", "Scaler dimuat")
     }
 
     fun predictPitch(
@@ -65,49 +39,45 @@ class PitchPredictionHelper(private val context: Context) {
         gyX: Float,
         gyY: Float,
         gyZ: Float
-    ): Float? {
-        try {
-            // 1. Siapkan input sensor
-            val rawInput = floatArrayOf(acX, acY, acZ, gyX, gyY, gyZ)
+    ): Float {
 
-            // 2. Normalisasi input
-            val normalizedInput = normalize(rawInput)
 
-            // 3. Buat tensor input untuk ONNX
-            val inputName = ortSession?.inputNames?.iterator()?.next()
-            val shape = longArrayOf(1, 6)
+        val input = floatArrayOf(acX, acY, acZ, gyX, gyY, gyZ)
 
-            val buffer = FloatBuffer.wrap(normalizedInput)
-            val tensor = OnnxTensor.createTensor(ortEnvironment, buffer, shape)
+        Log.i("ONNX", "Input = ${input.toList()}")
 
-            // 4. Jalankan inferensi
-            val results = ortSession?.run(mapOf(inputName to tensor))
-
-            // 5. Ambil hasil prediksi
-            val output = results?.get(0)?.value as Array<*>
-            val prediction = (output[0] as FloatArray)[0]
-
-            // 6. Bersihkan resource
-            results?.close()
-            tensor.close()
-
-            return prediction
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            println("✗ Prediksi gagal: ${e.message}")
-            return null
+        val normalized = FloatArray(6)
+        for (i in 0..5) {
+            normalized[i] = (input[i] - mean[i]) / scale[i]
         }
+
+        Log.i("ONNX", "Normalized = ${normalized.toList()}")
+
+
+        val inputName = session.inputNames.first()
+        val buffer = FloatBuffer.wrap(normalized)
+        val tensor = OnnxTensor.createTensor(env, buffer, longArrayOf(1, 6))
+
+
+        val result = session.run(mapOf(inputName to tensor))
+
+        val output = (result[0].value as Array<FloatArray>)[0][0]
+
+        result.close()
+        tensor.close()
+
+        Log.i("ONNX", "✅ OUTPUT = $output")
+
+        return output
     }
 
     fun close() {
-        try {
-            ortSession?.close()
-            ortEnvironment?.close()
-            println("✓ Resource ONNX berhasil dibersihkan")
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        session.close()
+        env.close()
     }
-}
 
+    data class ScalerParams(
+        val mean: List<Double>,
+        val scale: List<Double>
+    )
+}
