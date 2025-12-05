@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="biru_tua">#0D47A1</color>
+    <color name="biru_muda">#42A5F5</color>
+    <color name="biru_latar">#E3F2FD</color>
+
+    <color name="putih">#FFFFFFFF</color>
+    <color name="hitam">#FF000000</color>
+    <color name="abu_lembut">#F5F5F5</color>
+
+
+    <color name="gradien_awal">#4A90E2</color>
+    <color name="gradien_tengah">#7EC8E3</color>
+    <color name="gradien_akhir">#E3F2FD</color>
+
+
+    <color name="biru_tombol">#1E88E5</color>
+    <color name="biru_tekan">#0D47A1</color>
+
+    <color name="teks_judul">#0D47A1</color>
+    <color name="teks_isi">#212121</color>
+
+</resources>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/biru_latar"
+    tools:context=".ViewPager">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_gradient"
+        android:padding="20dp"
+        android:elevation="8dp"
+        android:layout_marginBottom="24dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/foto_profile"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/logo_mpu6050"
+            app:civ_border_color="@color/putih"
+            app:civ_border_width="2dp"
+            android:layout_marginEnd="16dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/nama_pengguna"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Najwa Azizi"
+                android:textColor="@color/putih"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/proyek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Proyek: Prediksi Sudut MPU6050"
+                android:textColor="@color/putih"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_card"
+        android:elevation="6dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="-10dp"
+        android:layout_marginBottom="20dp"
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="8dp">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:tabIndicatorColor="@color/biru_tua"
+            app:tabTextColor="@color/teks_isi"
+            app:tabSelectedTextColor="@color/biru_tua"
+            app:tabIndicatorHeight="3dp"
+            android:elevation="3dp" />
+    </LinearLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

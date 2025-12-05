@@ -1,0 +1,18 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Base.Theme.NajwaBelajarNavigationDrawer" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/biru_tua</item>
+        <item name="colorPrimaryContainer">@color/biru_muda</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+
+        <item name="android:windowBackground">@color/putih</item>
+        <item name="android:statusBarColor">@color/biru_tua</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.NajwaBelajarNavigationDrawer" parent="Base.Theme.NajwaBelajarNavigationDrawer" />
+
+</resources>

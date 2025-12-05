@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">Model Prediksi Sudut MPU6050</string>
+    <string name="judul_splash">Sensor MPU6050</string>
+    <string name="subjudul_splash">Prediksi Sudut Kemiringan dengan Regresi ML</string>
+    <string name="tab_pendahuluan">Pendahuluan</string>
+    <string name="tab_sensor">Sensor</string>
+    <string name="tab_regresi">Regresi</string>
+
+    <string name="judul_pendahuluan">Tentang Proyek</string>
+    <string name="isi_pendahuluan">
+        Aplikasi ini dirancang untuk memprediksi sudut kemiringan yang terbaca dari sensor inersia MPU6050 menggunakan pendekatan Machine Learning regresi.
+        Tujuannya adalah membantu analisis posisi dan stabilitas objek berbasis sensorZ.
+    </string>
+
+
+    <string name="judul_sensor">Sensor MPU6050</string>
+    <string name="isi_sensor">
+        MPU6050 merupakan sensor inersia 6-axis yang menggabungkan accelerometer dan gyroscope untuk mengukur percepatan dan kecepatan sudut.
+        Data sensor digunakan sebagai input bagi model regresi untuk memprediksi sudut kemiringan aktual.
+    </string>
+
+    <string name="judul_regresi">Konsep Regresi</string>
+    <string name="isi_regresi">
+        Metode regresi digunakan untuk mempelajari hubungan antara input sensor (accelerometer dan gyroscope) dengan keluaran berupa sudut kemiringan (pitch).
+        Model ini membantu memprediksi sudut secara real-time dengan akurasi tinggi.
+    </string>
+    <string name="tombol_lanjut">Lanjut</string>
+
+    <string name="nav_beranda">Beranda</string>
+    <string name="nav_sensor">Sensor</string>
+    <string name="nav_model">Model ML</string>
+    <string name="nav_regresi">Regresi</string>
+    <string name="nav_profil">Profil</string>
+    <string name="nav_share">Bagikan</string>
+
+    <string name="judul_drawer">Dashboard MPU6050</string>
+    <string name="subjudul_drawer">Prediksi Sudut Kemiringan</string>
+
+    <string name="open">Buka</string>
+    <string name="close">Tutup</string>
+
+    <string name="next">Lanjut</string>
+    <string name="previous">Kembali</string>
+    <string name="lorem_ipsum">Isi contoh teks untuk menghindari error resource hilang</string>
+
+    <string name="halaman_draft">Halaman Draft</string>
+    <string name="halaman_help">Halaman Bantuan</string>
+    <string name="halaman_inbox">Halaman Inbox</string>
+    <string name="halaman_send">Halaman Kirim</string>
+    <string name="halaman_setting">Halaman Pengaturan</string>
+    <string name="halaman_utama">Halaman Utama</string>
+
+    <string name="first_fragment_label">Fragment Pertama</string>
+    <string name="second_fragment_label">Fragment Kedua</string>
+
+
+</resources>

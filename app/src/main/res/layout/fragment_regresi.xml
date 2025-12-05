@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/gambarRegresi"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/judul_regresi"
+            android:src="@drawable/regresi" />
+
+        <TextView
+            android:id="@+id/judulRegresi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/judul_regresi"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textRegresi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/isi_regresi"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:lineSpacingExtra="4dp"
+            android:textAlignment="center"
+            android:layout_marginBottom="24dp" />
+
+
+        <Button
+            android:id="@+id/btnLanjut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tombol_lanjut"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/biru_tombol"
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+</ScrollView>

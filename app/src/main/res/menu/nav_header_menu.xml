@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_beranda"
+            android:icon="@drawable/ic_beranda"
+            android:title="Beranda" />
+
+        <item
+            android:id="@+id/nav_sensor"
+            android:icon="@drawable/ic_sensor"
+            android:title="Data Sensor MPU6050" />
+
+        <item
+            android:id="@+id/nav_model"
+            android:icon="@drawable/ic_model"
+            android:title="Model Machine Learning" />
+
+        <item
+            android:id="@+id/nav_regresi"
+            android:icon="@drawable/ic_regresi"
+            android:title="Analisis Regresi" />
+    </group>
+
+    <item android:title="Lainnya">
+        <menu>
+
+            <item
+                android:id="@+id/nav_profil"
+                android:icon="@drawable/ic_profil"
+                android:title="Profil Pengguna" />
+
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_share"
+                android:title="Bagikan Aplikasi" />
+        </menu>
+    </item>
+
+</menu>
