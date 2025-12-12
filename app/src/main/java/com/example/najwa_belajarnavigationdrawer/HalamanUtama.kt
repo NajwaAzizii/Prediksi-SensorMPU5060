@@ -61,8 +61,9 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         view.findViewById<CardView>(R.id.cardLokasiPengujian)?.setOnClickListener {
-            Toast.makeText(this, "Fitur Lokasi Pengujian", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, LokasiPengujianActivity::class.java))
         }
+
 
         view.findViewById<CardView>(R.id.cardBlog1)?.setOnClickListener {
             Toast.makeText(this, "Panduan Kalibrasi Sensor MPU6050", Toast.LENGTH_SHORT).show()

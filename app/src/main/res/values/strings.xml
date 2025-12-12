@@ -52,6 +52,7 @@
 
     <string name="first_fragment_label">Fragment Pertama</string>
     <string name="second_fragment_label">Fragment Kedua</string>
+    <string name="title_activity_lokasi_pengujian">LokasiPengujianActivity</string>
 
 
 </resources>
