@@ -11,37 +11,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NajwaBelajarNavigationDrawer">
-
+        <activity
+            android:name=".DatasetSensorActivity"
+            android:exported="false" />
         <!-- HALAMAN UTAMA -->
         <activity
             android:name=".HalamanUtama"
             android:exported="true"
             android:label="Halaman Utama"
-            android:theme="@style/Theme.NajwaBelajarNavigationDrawer" />
-
-        <!-- HALAMAN PREDIKSI (INI YANG TADI HILANG) -->
+            android:theme="@style/Theme.NajwaBelajarNavigationDrawer" /> <!-- HALAMAN PREDIKSI (INI YANG TADI HILANG) -->
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
-
-        <!-- VIEW PAGER -->
+            android:exported="false" /> <!-- VIEW PAGER -->
         <activity
             android:name=".ViewPager"
-            android:exported="false" />
-
-        <!-- SPLASH / LAYAR PEMBUKA -->
+            android:exported="false" /> <!-- SPLASH / LAYAR PEMBUKA -->
         <activity
             android:name=".LayarPembuka"
             android:exported="true"
             tools:ignore="DuplicateActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
     </application>
 
 </manifest>

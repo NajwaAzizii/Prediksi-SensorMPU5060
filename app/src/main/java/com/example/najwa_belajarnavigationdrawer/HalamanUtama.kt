@@ -52,8 +52,7 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // Card Dataset Sensor
         view.findViewById<CardView>(R.id.cardDatasetSensor)?.setOnClickListener {
-            Toast.makeText(this, "Fitur Dataset Sensor", Toast.LENGTH_SHORT).show()
-            // TODO: Buka activity untuk melihat dataset sensor
+            startActivity(Intent(this, DatasetSensorActivity::class.java))
         }
 
         // Card Lokasi Pengujian

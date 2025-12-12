@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="10dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="5dp"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <!-- TITLE -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Data #1"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/hitam"
+            android:layout_marginBottom="14dp" />
+
+        <!-- ACCELEROMETER LABEL -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Accelerometer"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="@color/hitam"
+            android:layout_marginBottom="4dp" />
+
+        <TextView android:id="@+id/tvAcX" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/tvAcY" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/tvAcZ" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gyroscope"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="@color/hitam"
+            android:layout_marginBottom="4dp" />
+
+
+        <TextView android:id="@+id/tvGyX" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/tvGyY" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/tvGyZ" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <TextView
+            android:id="@+id/tvPitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(Pitch °): "
+            android:textSize="15sp"
+            android:textColor="@color/hitam"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"/>
+
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
