@@ -3,6 +3,8 @@ package com.example.najwa_belajarnavigationdrawer
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +22,7 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding = ActivityHalamanUtamaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // ===== TOOLBAR & DRAWER =====
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
@@ -35,66 +38,61 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         binding.navView.setNavigationItemSelectedListener(this)
 
-        // Tampilkan isi utama (main_content)
-        val isiUtama = LayoutInflater.from(this).inflate(R.layout.main_content, null)
-        binding.drawerlayout.findViewById<android.widget.FrameLayout>(R.id.containerUtama)
-            .addView(isiUtama)
+        binding.btnLogin.setOnClickListener {
+            Toast.makeText(this, "Menuju halaman Login", Toast.LENGTH_SHORT).show()
+            // startActivity(Intent(this, LoginActivity::class.java))
+            binding.drawerlayout.closeDrawers()
+        }
 
-        // Setup click listeners untuk semua card
+        val isiUtama = LayoutInflater.from(this).inflate(R.layout.main_content, null)
+        binding.containerUtama.addView(isiUtama)
+
         setupCardClickListeners(isiUtama)
     }
 
-    private fun setupCardClickListeners(view: android.view.View) {
-        // Card Cek Sudut Kemiringan
+    private fun setupCardClickListeners(view: View) {
+
         view.findViewById<CardView>(R.id.cardCekSudut)?.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
 
-        // Card Dataset Sensor
         view.findViewById<CardView>(R.id.cardDatasetSensor)?.setOnClickListener {
             startActivity(Intent(this, DatasetSensorActivity::class.java))
         }
 
-        // Card Lokasi Pengujian
         view.findViewById<CardView>(R.id.cardLokasiPengujian)?.setOnClickListener {
             Toast.makeText(this, "Fitur Lokasi Pengujian", Toast.LENGTH_SHORT).show()
-            // TODO: Buka activity untuk lokasi pengujian
         }
 
-        // Blog Card 1
         view.findViewById<CardView>(R.id.cardBlog1)?.setOnClickListener {
             Toast.makeText(this, "Panduan Kalibrasi Sensor MPU6050", Toast.LENGTH_SHORT).show()
-            // TODO: Buka detail blog
         }
 
-        // Blog Card 2
         view.findViewById<CardView>(R.id.cardBlog2)?.setOnClickListener {
             Toast.makeText(this, "Tips Mengambil Data Sensor", Toast.LENGTH_SHORT).show()
-            // TODO: Buka detail blog
         }
 
-        // Blog Card 3
         view.findViewById<CardView>(R.id.cardBlog3)?.setOnClickListener {
             Toast.makeText(this, "Cara Meningkatkan Akurasi Model", Toast.LENGTH_SHORT).show()
-            // TODO: Buka detail blog
         }
     }
 
     override fun onNavigationItemSelected(item: android.view.MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_home -> {
-                // Sudah di home
+                // sudah di beranda
             }
             R.id.nav_prediksi -> {
                 startActivity(Intent(this, MainActivity::class.java))
             }
-            R.id.nav_sensor -> {
-                Toast.makeText(this, "Menu Sensor", Toast.LENGTH_SHORT).show()
-                // TODO: Navigate ke fragment sensor
+            R.id.nav_dataset -> {
+                startActivity(Intent(this, DatasetSensorActivity::class.java))
             }
-            R.id.nav_regresi -> {
-                Toast.makeText(this, "Menu Regresi", Toast.LENGTH_SHORT).show()
-                // TODO: Navigate ke fragment regresi
+            R.id.nav_lokasi -> {
+                Toast.makeText(this, "Lokasi Pengujian", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_blog -> {
+                Toast.makeText(this, "Menu Blog", Toast.LENGTH_SHORT).show()
             }
         }
         binding.drawerlayout.closeDrawers()

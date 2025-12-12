@@ -1,24 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <group android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_home"
-            android:icon="@android:drawable/ic_menu_info_details"
-            android:title="Beranda" />
+            android:title="Beranda"
+            android:icon="@drawable/ic_beranda" />
 
         <item
             android:id="@+id/nav_prediksi"
-            android:icon="@android:drawable/ic_menu_compass"
-            android:title="Prediksi Sudut Pitch" />
+            android:title="Cek Kemiringan"
+            android:icon="@drawable/ic_chart" />
 
         <item
-            android:id="@+id/nav_sensor"
-            android:icon="@android:drawable/ic_menu_view"
-            android:title="Info Sensor" />
+            android:id="@+id/nav_dataset"
+            android:title="Dataset Sensor MPU6050"
+            android:icon="@drawable/ic_dataset" />
 
         <item
-            android:id="@+id/nav_regresi"
-            android:icon="@android:drawable/ic_menu_sort_by_size"
-            android:title="Model Regresi" />
+            android:id="@+id/nav_lokasi"
+            android:title="Lokasi Pengujian Sensor"
+            android:icon="@drawable/ic_map" />
+
+        <item
+            android:id="@+id/nav_blog"
+            android:title="Blog"
+            android:icon="@drawable/ic_blog" />
     </group>
+
 </menu>
