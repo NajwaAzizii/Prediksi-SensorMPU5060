@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -38,12 +37,6 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         binding.navView.setNavigationItemSelectedListener(this)
 
-        binding.btnLogin.setOnClickListener {
-            Toast.makeText(this, "Menuju halaman Login", Toast.LENGTH_SHORT).show()
-            // startActivity(Intent(this, LoginActivity::class.java))
-            binding.drawerlayout.closeDrawers()
-        }
-
         val isiUtama = LayoutInflater.from(this).inflate(R.layout.main_content, null)
         binding.containerUtama.addView(isiUtama)
 
@@ -63,7 +56,6 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         view.findViewById<CardView>(R.id.cardLokasiPengujian)?.setOnClickListener {
             startActivity(Intent(this, LokasiPengujianActivity::class.java))
         }
-
 
         view.findViewById<CardView>(R.id.cardBlog1)?.setOnClickListener {
             Toast.makeText(this, "Panduan Kalibrasi Sensor MPU6050", Toast.LENGTH_SHORT).show()
@@ -90,10 +82,13 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(Intent(this, DatasetSensorActivity::class.java))
             }
             R.id.nav_lokasi -> {
-                Toast.makeText(this, "Lokasi Pengujian", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, LokasiPengujianActivity::class.java))
             }
             R.id.nav_blog -> {
                 Toast.makeText(this, "Menu Blog", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_login -> {
+                startActivity(Intent(this, LoginActivity::class.java))
             }
         }
         binding.drawerlayout.closeDrawers()

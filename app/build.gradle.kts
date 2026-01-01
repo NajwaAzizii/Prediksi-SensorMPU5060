@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
 
@@ -45,6 +44,8 @@ android {
 
 
 dependencies {
+    implementation("org.osmdroid:osmdroid-android:6.1.20")
+
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.16.3")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10")
@@ -58,7 +59,6 @@ dependencies {
     implementation("junit:junit:4.13.2")
     implementation("androidx.test.ext:junit:1.1.3")
     implementation("androidx.test.espresso:espresso-core:3.4.0")
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -67,7 +67,6 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
