@@ -13,19 +13,6 @@
         android:layout_height="wrap_content"
         android:padding="18dp">
 
-        <!-- tombol X -->
-        <ImageButton
-            android:id="@+id/btnClose"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="Tutup"
-            app:srcCompat="@drawable/ic_close"
-            app:tint="#6B6B6B"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- Lingkaran orange di belakang gambar error -->
         <!-- Lingkaran orange di belakang gambar error -->
         <FrameLayout
             android:id="@+id/errorIconCircle"

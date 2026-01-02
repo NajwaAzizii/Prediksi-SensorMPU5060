@@ -177,5 +177,18 @@
         app:layout_constraintTop_toBottomOf="@id/tvForgot"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+    <ImageButton
+        android:id="@+id/btnKembali"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/kembali"
+        android:contentDescription="Kembali"
+        android:padding="8dp"
+        app:tint="#3D63FF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 
@@ -10,7 +11,7 @@ android {
 
 
     defaultConfig {
-        applicationId = "com.example.belajarnavigationdrawer"
+        applicationId = "com.example.najwa_belajarnavigationdrawer"
         minSdk = 28
         targetSdk = 36
         versionCode = 1
@@ -44,6 +45,10 @@ android {
 
 
 dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-database")
+
     implementation("org.osmdroid:osmdroid-android:6.1.20")
 
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.16.3")
