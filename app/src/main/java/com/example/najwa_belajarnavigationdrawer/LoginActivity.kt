@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.najwa_belajarnavigationdrawer.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -14,15 +13,16 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val auth by lazy { FirebaseAuth.getInstance() }
 
+    // ✅ daftar email admin yang diizinkan (pakai lowercase semua)
+    private val adminEmails = setOf("admin@gmail.com")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // tombol kembali
         binding.btnKembali.setOnClickListener { finish() }
 
-        // biar enak: tekan "Done" di keyboard password => login
         binding.etPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 doLogin()
@@ -30,7 +30,6 @@ class LoginActivity : AppCompatActivity() {
             } else false
         }
 
-        // tombol masuk
         binding.btnMasuk.setOnClickListener { doLogin() }
     }
 
@@ -38,7 +37,6 @@ class LoginActivity : AppCompatActivity() {
         val email = binding.etEmail.text?.toString()?.trim().orEmpty()
         val pass = binding.etPassword.text?.toString()?.trim().orEmpty()
 
-        // validasi email
         if (email.isEmpty()) {
             binding.etEmail.error = "Email wajib diisi"
             binding.etEmail.requestFocus()
@@ -49,8 +47,6 @@ class LoginActivity : AppCompatActivity() {
             binding.etEmail.requestFocus()
             return
         }
-
-        // validasi password
         if (pass.isEmpty()) {
             binding.etPassword.error = "Password wajib diisi"
             binding.etPassword.requestFocus()
@@ -69,28 +65,38 @@ class LoginActivity : AppCompatActivity() {
                 setLoading(false)
 
                 if (task.isSuccessful) {
-                    Toast.makeText(this, "Login berhasil", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, HalamanUtama::class.java))
-                    finish()
-                } else {
-                    val dialog = LoginError(this)
-                    dialog.setMessage("Email atau Password Salah")
-                    dialog.setOnRetry {
-                        binding.etPassword.text?.clear()
-                        binding.etPassword.requestFocus()
-                    }
-                    dialog.show()
+                    val userEmail = task.result.user?.email?.trim()?.lowercase()
 
+                    if (userEmail != null && adminEmails.contains(userEmail)) {
+                        // ✅ IMPORTANT: bersihin stack, langsung pindah ke BlogList
+                        val i = Intent(this, BlogListActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                        startActivity(i)
+                    } else {
+                        auth.signOut()
+                        showError("Akun ini bukan admin")
+                    }
+                } else {
+                    showError("Email atau Password Salah")
                 }
             }
+    }
+
+    private fun showError(msg: String) {
+        val dialog = LoginError(this)
+        dialog.setMessage(msg)
+        dialog.setOnRetry {
+            binding.etPassword.text?.clear()
+            binding.etPassword.requestFocus()
+        }
+        dialog.show()
     }
 
     private fun setLoading(isLoading: Boolean) {
         binding.btnMasuk.isEnabled = !isLoading
         binding.etEmail.isEnabled = !isLoading
         binding.etPassword.isEnabled = !isLoading
-
-        // kalau btnMasuk adalah MaterialButton, ini aman:
         binding.btnMasuk.text = if (isLoading) "Memproses..." else "Masuk"
     }
 }
