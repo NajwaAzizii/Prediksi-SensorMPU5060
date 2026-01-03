@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainContentRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/putih">
+    android:background="@color/putih"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -171,6 +173,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/btnOpenBlogList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -181,7 +184,10 @@
             android:text="Blog"
             android:textSize="12sp"
             android:textColor="@color/putih"
-            android:background="@drawable/bg_section_label" />
+            android:background="@drawable/bg_section_label"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"/>
 
 
         <!-- Sorotan Hari Ini Label -->
@@ -225,6 +231,7 @@
                 android:background="@android:color/white">
 
                 <ImageView
+                    android:id="@+id/ivBlog1"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:src="@drawable/traning"
@@ -239,6 +246,7 @@
                     android:layout_marginStart="12dp">
 
                     <TextView
+                        android:id="@+id/tvBlogTitle1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Panduan Kalibrasi Sensor MPU6050 untuk Pemula"
@@ -262,6 +270,7 @@
                             android:contentDescription="Author Icon" />
 
                         <TextView
+                            android:id="@+id/tvBlogAuthor1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Najwa"
@@ -294,6 +303,7 @@
                 android:background="@android:color/white">
 
                 <ImageView
+                    android:id="@+id/ivBlog2"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:src="@drawable/gambar_sensor"
@@ -308,6 +318,7 @@
                     android:layout_marginStart="12dp">
 
                     <TextView
+                        android:id="@+id/tvBlogTitle2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Tips Mengambil Data Accelerometer &amp; Gyroscope"
@@ -331,6 +342,7 @@
                             android:contentDescription="Author Icon" />
 
                         <TextView
+                            android:id="@+id/tvBlogAuthor2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Azal"
@@ -363,6 +375,7 @@
                 android:background="@android:color/white">
 
                 <ImageView
+                    android:id="@+id/ivBlog3"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:src="@drawable/prediksi"
@@ -377,6 +390,7 @@
                     android:layout_marginStart="12dp">
 
                     <TextView
+                        android:id="@+id/tvBlogTitle3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Cara Meningkatkan Akurasi Model Machine Learning"
@@ -400,6 +414,7 @@
                             android:contentDescription="Author Icon" />
 
                         <TextView
+                            android:id="@+id/tvBlogAuthor3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Nodia"

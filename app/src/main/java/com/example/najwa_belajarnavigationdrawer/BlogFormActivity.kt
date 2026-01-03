@@ -3,6 +3,7 @@ package com.example.najwa_belajarnavigationdrawer
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -16,16 +17,30 @@ class BlogFormActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBlogFormBinding
 
-    private val dbRef by lazy { FirebaseDatabase.getInstance().reference.child("blogs") }
-    private val storage by lazy { FirebaseStorage.getInstance().reference.child("blog_thumbs") }
+    companion object {
+        private const val TAG = "BlogFormActivity"
+
+        // RTDB kamu (sesuai screenshot)
+        private const val DB_URL = "https://dbmpu5060-default-rtdb.firebaseio.com"
+
+        private const val BLOG_NODE = "blogs"
+        private const val THUMB_FOLDER = "blog_thumbs"
+        private const val ADMIN_EMAIL = "admin@gmail.com"
+    }
+
+    // ✅ Paksa DB yang sama dengan admin
+    private val db by lazy { FirebaseDatabase.getInstance(DB_URL) }
+    private val dbRef by lazy { db.reference.child(BLOG_NODE) }
+
+    // ✅ Storage ikuti google-services.json (paling aman)
+    private val storageRoot by lazy {
+        FirebaseStorage.getInstance().reference.child(THUMB_FOLDER)
+    }
 
     private var blogId: String? = null
     private var pickedImage: Uri? = null
     private var oldThumbUrl: String? = null
     private var oldCreatedAt: Long? = null
-
-    // ✅ email admin (samakan)
-    private val ADMIN_EMAIL = "admin@gmail.com"
 
     private fun isAdmin(): Boolean {
         val email = FirebaseAuth.getInstance().currentUser?.email?.trim()?.lowercase()
@@ -34,7 +49,6 @@ class BlogFormActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        // ✅ pengaman: kalau bukan admin, jangan boleh akses
         if (!isAdmin()) {
             Toast.makeText(this, "Akses ditolak (admin saja)", Toast.LENGTH_SHORT).show()
             startActivity(
@@ -58,12 +72,9 @@ class BlogFormActivity : AppCompatActivity() {
         binding = ActivityBlogFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnBack.setOnClickListener {
-            // finish() cukup, karena BlogFormActivity dibuka dari BlogListActivity
-            finish()
-            // atau: onBackPressedDispatcher.onBackPressed()
-        }
-        blogId = intent.getStringExtra("BLOG_ID")
+        binding.btnBack.setOnClickListener { finish() }
+
+        blogId = intent.getStringExtra("BLOG_ID")?.trim()
 
         binding.btnPickImage.setOnClickListener {
             pickImageLauncher.launch("image/*")
@@ -71,25 +82,28 @@ class BlogFormActivity : AppCompatActivity() {
 
         binding.btnSave.setOnClickListener { save() }
 
-        if (blogId != null) loadDetail(blogId!!)
+        if (!blogId.isNullOrEmpty()) loadDetail(blogId!!)
     }
 
     private fun loadDetail(id: String) {
-        dbRef.child(id).get().addOnSuccessListener { snap ->
-            val post = snap.getValue(BlogPost::class.java) ?: return@addOnSuccessListener
-            binding.etTitle.setText(post.title)
-            binding.etAuthor.setText(post.author)
-            binding.etContent.setText(post.content)
+        dbRef.child(id).get()
+            .addOnSuccessListener { snap ->
+                val post = snap.getValue(BlogPost::class.java) ?: return@addOnSuccessListener
 
-            oldThumbUrl = post.thumbnailUrl
-            oldCreatedAt = post.createdAt
+                binding.etTitle.setText(post.title)
+                binding.etAuthor.setText(post.author)
+                binding.etContent.setText(post.content)
 
-            if (!post.thumbnailUrl.isNullOrBlank()) {
-                Glide.with(this).load(post.thumbnailUrl).centerCrop().into(binding.imgThumb)
+                oldThumbUrl = post.thumbnailUrl
+                oldCreatedAt = post.createdAt
+
+                if (!post.thumbnailUrl.isNullOrBlank()) {
+                    Glide.with(this).load(post.thumbnailUrl).centerCrop().into(binding.imgThumb)
+                }
             }
-        }.addOnFailureListener {
-            toast("Gagal ambil data: ${it.message}")
-        }
+            .addOnFailureListener {
+                toast("Gagal ambil data: ${it.message}")
+            }
     }
 
     private fun save() {
@@ -103,25 +117,29 @@ class BlogFormActivity : AppCompatActivity() {
 
         setLoading(true)
 
-        val id = blogId ?: dbRef.push().key
-        if (id == null) {
+        val id = (blogId ?: dbRef.push().key)?.trim()
+        if (id.isNullOrEmpty()) {
             setLoading(false)
             toast("Gagal membuat ID")
             return
         }
 
-        // jika pilih gambar baru -> upload ke storage
-        if (pickedImage != null) {
-            val ref = storage.child("$id.jpg")
+        val uri = pickedImage
+        if (uri != null) {
+            val ref = storageRoot.child("$id.jpg")
 
-            ref.putFile(pickedImage!!)
-                .continueWithTask { uploadTask ->
-                    if (!uploadTask.isSuccessful) {
-                        throw uploadTask.exception ?: Exception("Upload gagal")
+            Log.d(TAG, "Upload -> bucket=${ref.bucket} path=${ref.path} uri=$uri")
+
+            // ✅ Pola upload paling aman: putFile -> kalau sukses baru ambil downloadUrl
+            ref.putFile(uri)
+                .continueWithTask { task ->
+                    if (!task.isSuccessful) {
+                        throw task.exception ?: Exception("Upload gagal")
                     }
                     ref.downloadUrl
                 }
                 .addOnSuccessListener { url ->
+                    Log.d(TAG, "downloadUrl OK: $url")
                     upsertPost(
                         id = id,
                         title = title,
@@ -130,12 +148,14 @@ class BlogFormActivity : AppCompatActivity() {
                         thumbUrl = url.toString()
                     )
                 }
-                .addOnFailureListener {
+                .addOnFailureListener { e ->
                     setLoading(false)
-                    toast("Upload thumbnail gagal: ${it.message}")
+                    Log.e(TAG, "Upload/URL gagal", e)
+                    toast("Upload thumbnail gagal: ${e.message}")
                 }
+
         } else {
-            // tidak pilih gambar baru -> pakai yang lama (edit) / kosong (create)
+            // tidak pilih gambar baru -> pakai lama / kosong
             upsertPost(
                 id = id,
                 title = title,
@@ -153,7 +173,6 @@ class BlogFormActivity : AppCompatActivity() {
             author = author,
             content = content,
             thumbnailUrl = thumbUrl,
-            // ✅ kalau edit: pertahankan createdAt lama
             createdAt = oldCreatedAt ?: System.currentTimeMillis()
         )
 
@@ -177,5 +196,6 @@ class BlogFormActivity : AppCompatActivity() {
         binding.btnSave.text = if (isLoading) "Menyimpan..." else "Simpan"
     }
 
-    private fun toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    private fun toast(msg: String) =
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }

@@ -29,6 +29,9 @@
              "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
         -->
         <activity
+            android:name=".BlogListUserActivity"
+            android:exported="false" />
+        <activity
             android:name=".BlogDetailActivity"
             android:exported="false" />
         <activity

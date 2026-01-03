@@ -15,31 +15,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Sembunyikan ActionBar
         supportActionBar?.hide()
 
-        // Inisialisasi prediction helper
         predictionHelper = PitchPredictionHelper(this)
 
-        // Tombol kembali
-        binding.btnKembali.setOnClickListener {
-            finish()
-        }
-
-        // Setup button untuk prediksi
-        binding.btnPredict.setOnClickListener {
-            performPrediction()
-        }
+        binding.btnKembali.setOnClickListener { finish() }
+        binding.btnPredict.setOnClickListener { performPrediction() }
     }
 
     private fun performPrediction() {
-        // Validasi input
         if (!validateInputs()) {
             Toast.makeText(this, "Mohon isi semua field dengan benar", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Ambil data dari input
         val acX = binding.etAcX.text.toString().toFloatOrNull() ?: 0f
         val acY = binding.etAcY.text.toString().toFloatOrNull() ?: 0f
         val acZ = binding.etAcZ.text.toString().toFloatOrNull() ?: 0f
@@ -47,12 +36,8 @@ class MainActivity : AppCompatActivity() {
         val gyY = binding.etGyY.text.toString().toFloatOrNull() ?: 0f
         val gyZ = binding.etGyZ.text.toString().toFloatOrNull() ?: 0f
 
-        // Lakukan prediksi
-        val predictedPitch = predictionHelper.predictPitch(
-            acX, acY, acZ, gyX, gyY, gyZ
-        )
+        val predictedPitch = predictionHelper.predictPitch(acX, acY, acZ, gyX, gyY, gyZ)
 
-        // Tampilkan hasil
         if (predictedPitch != null) {
             binding.tvResult.text = "Sudut Kemiringan (Pitch °): ${"%.2f".format(predictedPitch)}"
             Toast.makeText(this, "Prediksi berhasil!", Toast.LENGTH_SHORT).show()
