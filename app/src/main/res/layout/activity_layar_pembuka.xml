@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/bg_gradient"
+    android:background="@drawable/bg_onboarding_gradient">
     tools:context=".LayarPembuka">
 
     <ImageView

@@ -6,7 +6,7 @@
     android:id="@+id/drawerlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/biru_latar"
+    android:background="#F5F7FA"
     tools:context=".HalamanUtama"
     tools:openDrawer="start">
 
@@ -15,42 +15,39 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- Modern Toolbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/gradien_awal"
+            android:background="@drawable/bg_toolbar_gradient"
+            android:elevation="8dp"
+            android:minHeight="?attr/actionBarSize"
+            android:paddingVertical="8dp"
             android:titleTextColor="@android:color/white"
-            android:title="Model Prediksi Sudut MPU6050"
-            app:titleCentered="true"/>
+            app:title="Model Prediksi Sudut MPU6050"
+            app:titleCentered="true" />
 
+        <!-- Main Content Container -->
         <FrameLayout
             android:id="@+id/containerUtama"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </LinearLayout>
 
-
-    <!-- Custom Navigation Drawer -->
-    <LinearLayout
+    <!-- Navigation Drawer -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:orientation="vertical"
-        android:background="@color/putih">
-
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            app:headerLayout="@layout/header"
-            app:menu="@menu/nav_header_menu"
-            android:background="@color/putih"
-            app:itemTextColor="@color/teks_isi"
-            app:itemIconTint="@color/biru_tua"
-            app:itemRippleColor="@color/biru_muda" />
-
-    </LinearLayout>
+        android:background="@color/putih"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/header"
+        app:itemIconTint="@color/biru_tua"
+        app:itemRippleColor="@color/biru_muda"
+        app:itemTextColor="@color/teks_isi"
+        app:menu="@menu/nav_header_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

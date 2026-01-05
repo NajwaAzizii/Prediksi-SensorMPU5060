@@ -1,16 +1,24 @@
 package com.example.najwa_belajarnavigationdrawer
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.najwa_belajarnavigationdrawer.databinding.ActivityHalamanUtamaBinding
 import com.google.android.material.navigation.NavigationView
@@ -35,7 +43,7 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         db.reference.child(BLOG_NODE)
     }
     private val latestQuery: Query by lazy {
-        blogsRef.orderByChild("createdAt").limitToLast(3)
+        blogsRef.orderByChild("createdAt")
     }
     private var latestListener: ValueEventListener? = null
 
@@ -48,22 +56,33 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val createdAt: Long
     )
 
-    // ====== REKOMENDASI VIEWS (di main_content.xml) ======
-    private lateinit var cardBlog1: CardView
-    private lateinit var cardBlog2: CardView
-    private lateinit var cardBlog3: CardView
+    // ====== ViewPager2 ======
+    private var blogViewPager: ViewPager2? = null
+    private lateinit var blogPageAdapter: BlogPageAdapter
+    private var indicator1: View? = null
+    private var indicator2: View? = null
+    private var indicator3: View? = null
 
-    private lateinit var ivBlog1: ImageView
-    private lateinit var ivBlog2: ImageView
-    private lateinit var ivBlog3: ImageView
+    // ====== Search Dialog ======
+    private var searchDialog: Dialog? = null
+    private var allBlogsList = listOf<BlogItem>()
 
-    private lateinit var tvBlogTitle1: TextView
-    private lateinit var tvBlogTitle2: TextView
-    private lateinit var tvBlogTitle3: TextView
+    // ====== OLD VIEWS (for compatibility) ======
+    private var cardBlog1: CardView? = null
+    private var cardBlog2: CardView? = null
+    private var cardBlog3: CardView? = null
 
-    private lateinit var tvBlogAuthor1: TextView
-    private lateinit var tvBlogAuthor2: TextView
-    private lateinit var tvBlogAuthor3: TextView
+    private var ivBlog1: ImageView? = null
+    private var ivBlog2: ImageView? = null
+    private var ivBlog3: ImageView? = null
+
+    private var tvBlogTitle1: TextView? = null
+    private var tvBlogTitle2: TextView? = null
+    private var tvBlogTitle3: TextView? = null
+
+    private var tvBlogAuthor1: TextView? = null
+    private var tvBlogAuthor2: TextView? = null
+    private var tvBlogAuthor3: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,16 +109,23 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         homeView = LayoutInflater.from(this).inflate(R.layout.main_content, binding.containerUtama, false)
         binding.containerUtama.addView(homeView)
 
-        // ===== CLICK LISTENER CARD FITUR (tetap) =====
+        // ===== CLICK LISTENER CARD FITUR =====
         setupStaticCardClickListeners(homeView)
 
-        // ===== BLOG REKOMENDASI: bind view + loading + attach listener =====
-        bindRecommendationViews(homeView)
-        setRecommendationLoadingState()
+        // ===== BLOG ViewPager2 Setup =====
+        setupBlogViewPager(homeView)
 
-        // (opsional) kalau kamu sudah tambahkan id btnOpenBlogList di main_content
+        // ===== OLD BLOG VIEWS (hidden, for compatibility) =====
+        bindCompatibilityViews(homeView)
+
+        // ===== Blog List Button =====
         homeView.findViewById<View?>(R.id.btnOpenBlogList)?.setOnClickListener {
             startActivity(Intent(this, BlogListUserActivity::class.java))
+        }
+
+        // ===== Search Blog Button - SHOW DIALOG! =====
+        homeView.findViewById<View?>(R.id.btnSearchBlog)?.setOnClickListener {
+            showSearchDialog()
         }
     }
 
@@ -112,6 +138,7 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onStop()
         latestListener?.let { latestQuery.removeEventListener(it) }
         latestListener = null
+        searchDialog?.dismiss()
     }
 
     private fun setupStaticCardClickListeners(view: View) {
@@ -124,35 +151,128 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         view.findViewById<CardView>(R.id.cardLokasiPengujian)?.setOnClickListener {
             startActivity(Intent(this, LokasiPengujianActivity::class.java))
         }
-
-        // ❌ HAPUS toast blog1/blog2/blog3 lama, karena sekarang blog diisi dari firebase
     }
 
-    private fun bindRecommendationViews(view: View) {
-        cardBlog1 = view.findViewById(R.id.cardBlog1)
-        cardBlog2 = view.findViewById(R.id.cardBlog2)
-        cardBlog3 = view.findViewById(R.id.cardBlog3)
+    private fun setupBlogViewPager(view: View) {
+        blogViewPager = view.findViewById(R.id.blogViewPager)
+        indicator1 = view.findViewById(R.id.indicator1)
+        indicator2 = view.findViewById(R.id.indicator2)
+        indicator3 = view.findViewById(R.id.indicator3)
 
-        ivBlog1 = view.findViewById(R.id.ivBlog1)
-        ivBlog2 = view.findViewById(R.id.ivBlog2)
-        ivBlog3 = view.findViewById(R.id.ivBlog3)
+        if (blogViewPager == null) {
+            Log.w("HalamanUtama", "blogViewPager not found")
+            return
+        }
 
-        tvBlogTitle1 = view.findViewById(R.id.tvBlogTitle1)
-        tvBlogTitle2 = view.findViewById(R.id.tvBlogTitle2)
-        tvBlogTitle3 = view.findViewById(R.id.tvBlogTitle3)
+        blogPageAdapter = BlogPageAdapter { blogId ->
+            startActivity(Intent(this, BlogDetailActivity::class.java).putExtra("BLOG_ID", blogId))
+        }
 
-        tvBlogAuthor1 = view.findViewById(R.id.tvBlogAuthor1)
-        tvBlogAuthor2 = view.findViewById(R.id.tvBlogAuthor2)
-        tvBlogAuthor3 = view.findViewById(R.id.tvBlogAuthor3)
+        blogViewPager?.adapter = blogPageAdapter
+        blogViewPager?.offscreenPageLimit = 1
+
+        // Page change callback for indicators
+        blogViewPager?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                updateIndicators(position)
+            }
+        })
     }
 
-    private fun setRecommendationLoadingState() {
-        tvBlogTitle1.text = "Memuat..."
-        tvBlogTitle2.text = "Memuat..."
-        tvBlogTitle3.text = "Memuat..."
-        tvBlogAuthor1.text = ""
-        tvBlogAuthor2.text = ""
-        tvBlogAuthor3.text = ""
+    private fun updateIndicators(position: Int) {
+        if (indicator1 == null || indicator2 == null || indicator3 == null) return
+
+        val totalPages = blogPageAdapter.itemCount
+        if (totalPages == 0) return
+
+        val activeDrawable = R.drawable.blog_indicator_active
+        val inactiveDrawable = R.drawable.blog_indicator_inactive
+
+        indicator1?.setBackgroundResource(if (position == 0) activeDrawable else inactiveDrawable)
+        indicator2?.setBackgroundResource(if (position == 1) activeDrawable else inactiveDrawable)
+        indicator3?.setBackgroundResource(if (position == 2) activeDrawable else inactiveDrawable)
+
+        // Update visibility based on total pages
+        indicator1?.visibility = if (totalPages > 0) View.VISIBLE else View.GONE
+        indicator2?.visibility = if (totalPages > 1) View.VISIBLE else View.GONE
+        indicator3?.visibility = if (totalPages > 2) View.VISIBLE else View.GONE
+    }
+
+    private fun bindCompatibilityViews(view: View) {
+        try {
+            cardBlog1 = view.findViewById(R.id.cardBlog1)
+            cardBlog2 = view.findViewById(R.id.cardBlog2)
+            cardBlog3 = view.findViewById(R.id.cardBlog3)
+
+            ivBlog1 = view.findViewById(R.id.ivBlog1)
+            ivBlog2 = view.findViewById(R.id.ivBlog2)
+            ivBlog3 = view.findViewById(R.id.ivBlog3)
+
+            tvBlogTitle1 = view.findViewById(R.id.tvBlogTitle1)
+            tvBlogTitle2 = view.findViewById(R.id.tvBlogTitle2)
+            tvBlogTitle3 = view.findViewById(R.id.tvBlogTitle3)
+
+            tvBlogAuthor1 = view.findViewById(R.id.tvBlogAuthor1)
+            tvBlogAuthor2 = view.findViewById(R.id.tvBlogAuthor2)
+            tvBlogAuthor3 = view.findViewById(R.id.tvBlogAuthor3)
+        } catch (e: Exception) {
+            Log.w("HalamanUtama", "Compatibility views setup", e)
+        }
+    }
+
+    private fun showSearchDialog() {
+        searchDialog = Dialog(this)
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_search_blog, null)
+        searchDialog?.setContentView(dialogView)
+
+        // Setup dialog window
+        searchDialog?.window?.apply {
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            setGravity(Gravity.TOP)
+            setBackgroundDrawableResource(android.R.color.transparent)
+            attributes?.y = 100 // Position from top
+        }
+
+        val etSearch = dialogView.findViewById<EditText>(R.id.etSearchBlog)
+        val btnClose = dialogView.findViewById<ImageView>(R.id.btnCloseSearch)
+
+        btnClose.setOnClickListener {
+            searchDialog?.dismiss()
+        }
+
+        etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                val query = s.toString().trim().lowercase()
+                if (query.length >= 2) {
+                    performSearch(query)
+                }
+            }
+        })
+
+        // Auto focus and show keyboard
+        etSearch.requestFocus()
+        searchDialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+
+        searchDialog?.show()
+    }
+
+    private fun performSearch(query: String) {
+        val filtered = allBlogsList.filter { blog ->
+            blog.title.lowercase().contains(query) ||
+                    blog.author.lowercase().contains(query) ||
+                    blog.content.lowercase().contains(query)
+        }
+
+        if (filtered.isNotEmpty()) {
+            // Navigate to BlogListUserActivity with search results
+            searchDialog?.dismiss()
+            val intent = Intent(this, BlogListUserActivity::class.java)
+            intent.putExtra("SEARCH_QUERY", query)
+            startActivity(intent)
+        }
     }
 
     private fun attachLatestBlogsListener() {
@@ -160,7 +280,7 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         latestListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                Log.d("HalamanUtama", "path=${snapshot.ref} count=${snapshot.childrenCount}")
+                Log.d("HalamanUtama", "Firebase data: count=${snapshot.childrenCount}")
 
                 val list = mutableListOf<BlogItem>()
 
@@ -198,52 +318,45 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         .thenByDescending { it.id }
                 )
 
-                bindRecommendationCards(sorted.take(3))
+                allBlogsList = sorted
+                Log.d("HalamanUtama", "Total blogs: ${sorted.size}")
+                updateBlogViewPager(sorted)
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@HalamanUtama, "Gagal load blog: ${error.message}", Toast.LENGTH_LONG).show()
-                Log.e("HalamanUtama", "load blog cancelled", error.toException())
+                Log.e("HalamanUtama", "Firebase error", error.toException())
             }
         }
 
         latestQuery.addValueEventListener(latestListener!!)
     }
 
-    private fun bindRecommendationCards(latest: List<BlogItem>) {
-        bindOneCard(latest.getOrNull(0), cardBlog1, ivBlog1, tvBlogTitle1, tvBlogAuthor1, R.drawable.traning)
-        bindOneCard(latest.getOrNull(1), cardBlog2, ivBlog2, tvBlogTitle2, tvBlogAuthor2, R.drawable.gambar_sensor)
-        bindOneCard(latest.getOrNull(2), cardBlog3, ivBlog3, tvBlogTitle3, tvBlogAuthor3, R.drawable.prediksi)
-    }
+    private fun updateBlogViewPager(allBlogs: List<BlogItem>) {
+        val placeholders = listOf(
+            R.drawable.traning,
+            R.drawable.gambar_sensor,
+            R.drawable.prediksi,
+            R.drawable.logo_mpu6050,
+            R.drawable.sensor,
+            R.drawable.peta
+        )
 
-    private fun bindOneCard(
-        blog: BlogItem?,
-        card: View,
-        iv: ImageView,
-        tvTitle: TextView,
-        tvAuthor: TextView,
-        placeholderRes: Int
-    ) {
-        if (blog == null) {
-            card.visibility = View.GONE
-            return
+        val adapterItems = allBlogs.mapIndexed { index, blog ->
+            BlogPageAdapter.BlogItem(
+                id = blog.id,
+                title = blog.title,
+                author = blog.author,
+                imageUrl = blog.imageUrl,
+                placeholderRes = placeholders.getOrNull(index % placeholders.size) ?: R.drawable.logo_mpu6050
+            )
         }
 
-        card.visibility = View.VISIBLE
-        tvTitle.text = blog.title
-        tvAuthor.text = blog.author
+        Log.d("HalamanUtama", "Updating ViewPager with ${adapterItems.size} blogs (${(adapterItems.size + 2) / 3} pages)")
+        blogPageAdapter.submitList(adapterItems)
 
-        val url = blog.imageUrl?.trim().takeIf { !it.isNullOrEmpty() }
-
-        Glide.with(this)
-            .load(url)
-            .placeholder(placeholderRes)
-            .error(placeholderRes)
-            .centerCrop()
-            .into(iv)
-
-        card.setOnClickListener {
-            startActivity(Intent(this, BlogDetailActivity::class.java).putExtra("BLOG_ID", blog.id))
+        if (adapterItems.isNotEmpty()) {
+            updateIndicators(0)
         }
     }
 
@@ -253,10 +366,7 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_prediksi -> startActivity(Intent(this, MainActivity::class.java))
             R.id.nav_dataset -> startActivity(Intent(this, DatasetSensorActivity::class.java))
             R.id.nav_lokasi -> startActivity(Intent(this, LokasiPengujianActivity::class.java))
-
-            // ✅ BLOG MENU sekarang buka BlogListUserActivity (bukan toast)
             R.id.nav_blog -> startActivity(Intent(this, BlogListUserActivity::class.java))
-
             R.id.nav_login -> startActivity(Intent(this, LoginActivity::class.java))
         }
         binding.drawerlayout.closeDrawers()

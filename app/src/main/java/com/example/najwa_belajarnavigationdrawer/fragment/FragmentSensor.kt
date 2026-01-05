@@ -1,11 +1,15 @@
 package com.example.najwa_belajarnavigationdrawer.fragment
+
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.najwa_belajarnavigationdrawer.HalamanUtama
 import com.example.najwa_belajarnavigationdrawer.R
 import com.example.najwa_belajarnavigationdrawer.databinding.FragmentSensorBinding
+
 class FragmentSensor : Fragment() {
     private var _binding: FragmentSensorBinding? = null
     private val binding get() = _binding!!
@@ -18,6 +22,13 @@ class FragmentSensor : Fragment() {
 
         binding.judulSensor.text = getString(R.string.judul_sensor)
         binding.textSensor.text = getString(R.string.isi_sensor)
+
+        // Handle Skip button
+        binding.btnSkip.setOnClickListener {
+            val intent = Intent(requireContext(), HalamanUtama::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
 
         return binding.root
     }
