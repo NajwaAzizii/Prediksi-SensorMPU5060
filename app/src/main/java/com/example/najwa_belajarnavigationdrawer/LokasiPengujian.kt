@@ -4,5 +4,6 @@ data class LokasiPengujian(
     val nama: String,
     val deskripsi: String,
     val lat: Double,
-    val lng: Double
+    val lng: Double,
+    val isPrimary: Boolean = false
 )
