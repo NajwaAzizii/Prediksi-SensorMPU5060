@@ -16,12 +16,17 @@ class LoginActivity : AppCompatActivity() {
     private val auth by lazy { FirebaseAuth.getInstance() }
 
     // ✅ daftar email admin yang diizinkan (pakai lowercase semua)
-    private val adminEmails = setOf("admin@gmail.com")
+    private val adminEmails = setOf(
+        "najwa23ti@mahasiswa.pcr.ac.id",
+        "admin@gmail.com"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar?.hide()
 
         binding.btnKembali.setOnClickListener { finish() }
 

@@ -5,202 +5,239 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F8FF"
+    android:background="@drawable/bg_onboarding_gradient"
     tools:context=".LoginActivity">
 
-    <!-- ===================== -->
-    <!-- BUBBLE KIRI ATAS (2x) -->
-    <!-- ===================== -->
-
-    <View
-        android:id="@+id/bubbleTopLeftBig"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:alpha="0.55"
-        android:background="@drawable/bg_login_bubble"
-        android:translationX="-110dp"
-        android:translationY="-60dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/bubbleTopLeftSmall"
-        android:layout_width="200dp"
-        android:layout_height="210dp"
-        android:alpha="0.45"
-        android:background="@drawable/bg_login_bubble"
-        android:translationX="20dp"
-        android:translationY="-135dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <!-- ======================= -->
-    <!-- BUBBLE KANAN BAWAH (2x) -->
-    <!-- (DIJAGA AGAR KELIHATAN 2, TIDAK NYATU) -->
-    <!-- ======================= -->
-
-    <!-- Bubble besar: yang paling pojok -->
-    <View
-        android:id="@+id/bubbleBottomRightBig"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
-        android:alpha="0.55"
-        android:background="@drawable/bg_login_bubble"
-        android:translationX="10dp"
-        android:translationY="150dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <!-- Bubble kecil: digeser sedikit ke kiri-atas supaya terlihat 2 lingkaran -->
-    <View
-        android:id="@+id/bubbleBottomRightSmall"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:alpha="0.45"
-        android:background="@drawable/bg_login_bubble"
-        android:translationX="70dp"
-        android:translationY="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-
-    <TextView
-        android:id="@+id/tvMasuk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Masuk"
-        android:textStyle="bold"
-        android:textSize="22sp"
-        android:textColor="#3D63FF"
-        android:layout_marginTop="130dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilEmail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="24dp"
-        app:boxBackgroundMode="outline"
-        app:boxBackgroundColor="@android:color/white"
-        app:boxStrokeColor="#E3E7F6"
-        app:boxStrokeWidth="1dp"
-        app:boxCornerRadiusTopStart="12dp"
-        app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusBottomStart="12dp"
-        app:boxCornerRadiusBottomEnd="12dp"
-        app:endIconMode="custom"
-        app:endIconDrawable="@drawable/ic_email"
-        app:endIconTint="#B6BBD1"
-        app:layout_constraintTop_toBottomOf="@id/tvMasuk"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="masukkan Email"
-            android:inputType="textEmailAddress"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:gravity="center_vertical"
-            android:includeFontPadding="false"
-            android:textColor="#222222"
-            android:textColorHint="#9AA3C7"
-            android:background="@null"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="12dp"
-        app:boxBackgroundMode="outline"
-        app:boxBackgroundColor="@android:color/white"
-        app:boxStrokeColor="#E3E7F6"
-        app:boxStrokeWidth="1dp"
-        app:boxCornerRadiusTopStart="12dp"
-        app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusBottomStart="12dp"
-        app:boxCornerRadiusBottomEnd="12dp"
-        app:endIconMode="password_toggle"
-        app:endIconTint="#B6BBD1"
-        app:layout_constraintTop_toBottomOf="@id/tilEmail"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="masukkan Kata sandi"
-            android:inputType="textPassword"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:gravity="center_vertical"
-            android:includeFontPadding="false"
-            android:textColor="#222222"
-            android:textColorHint="#9AA3C7"
-            android:background="@null"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tvForgot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lupa Password?"
-        android:textSize="12sp"
-        android:textColor="#3D63FF"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="28dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintTop_toBottomOf="@id/tilPassword"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnMasuk"
-        android:layout_width="0dp"
-        android:layout_height="54dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="18dp"
-        android:text="Masuk"
-        android:textAllCaps="false"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="@android:color/white"
-        android:elevation="6dp"
-        app:cornerRadius="12dp"
-        app:backgroundTint="#3D63FF"
-        app:layout_constraintTop_toBottomOf="@id/tvForgot"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <!-- Back Button -->
     <ImageButton
         android:id="@+id/btnKembali"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:background="@android:color/transparent"
         android:src="@drawable/kembali"
         android:contentDescription="Kembali"
-        android:padding="8dp"
-        app:tint="#3D63FF"
+        android:padding="4dp"
+        app:tint="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"/>
+
+    <!-- Login Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="12dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="28dp">
+
+            <!-- Welcome Badge -->
+            <LinearLayout
+                android:id="@+id/badgeWelcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_section_badge"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@android:drawable/ic_lock_idle_lock"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="6dp"
+                    app:tint="@android:color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Login Admin"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvMasuk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Masuk"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:textColor="#1e3c72"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@id/badgeWelcome"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Subtitle -->
+            <TextView
+                android:id="@+id/tvSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kelola blog dengan akun admin"
+                android:textSize="13sp"
+                android:textColor="#64748b"
+                android:gravity="center"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintTop_toBottomOf="@id/tvMasuk"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Email Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:boxBackgroundMode="outline"
+                app:boxBackgroundColor="#F9FAFB"
+                app:boxStrokeColor="#7e22ce"
+                app:boxStrokeWidth="2dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_email"
+                app:endIconTint="#7e22ce"
+                app:hintTextColor="#7e22ce"
+                app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="masukkan Email"
+                    android:inputType="textEmailAddress"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    android:textColor="#1e3c72"
+                    android:textColorHint="#94a3b8"
+                    android:textSize="15sp"
+                    android:background="@null"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Password Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:boxBackgroundMode="outline"
+                app:boxBackgroundColor="#F9FAFB"
+                app:boxStrokeColor="#7e22ce"
+                app:boxStrokeWidth="2dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:endIconMode="password_toggle"
+                app:endIconTint="#7e22ce"
+                app:hintTextColor="#7e22ce"
+                app:layout_constraintTop_toBottomOf="@id/tilEmail"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="masukkan Kata sandi"
+                    android:inputType="textPassword"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    android:textColor="#1e3c72"
+                    android:textColorHint="#94a3b8"
+                    android:textSize="15sp"
+                    android:background="@null"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Forgot Password -->
+            <TextView
+                android:id="@+id/tvForgot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lupa Password?"
+                android:textSize="13sp"
+                android:textColor="#7e22ce"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:padding="4dp"
+                app:layout_constraintTop_toBottomOf="@id/tilPassword"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Login Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMasuk"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="24dp"
+                android:text="Masuk"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                app:cornerRadius="16dp"
+                app:backgroundTint="#7e22ce"
+                app:elevation="6dp"
+                app:layout_constraintTop_toBottomOf="@id/tvForgot"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Decorative Circles -->
+    <View
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:background="@android:color/white"
+        android:alpha="0.05"
+        android:layout_marginStart="-90dp"
+        android:layout_marginTop="-90dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:background="@android:color/white"
+        android:alpha="0.05"
+        android:layout_marginEnd="-70dp"
+        android:layout_marginBottom="-70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
