@@ -1,5 +1,6 @@
 package com.example.najwa_belajarnavigationdrawer
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -12,11 +13,13 @@ class BlogDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBlogDetailBinding
 
-    // ✅ WAJIB samakan dengan RTDB di Firebase Console kamu
     private val DATABASE_URL = "https://dbmpu5060-default-rtdb.firebaseio.com"
     private val dbRef by lazy {
         FirebaseDatabase.getInstance(DATABASE_URL).reference.child("blogs")
     }
+
+    private var currentBlogTitle = ""
+    private var currentBlogContent = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +38,13 @@ class BlogDetailActivity : AppCompatActivity() {
             return
         }
 
-        Log.d("BlogDetailActivity", "Open blogId=$blogId, ref=${dbRef.ref}")
+        Log.d("BlogDetailActivity", "Open blogId=$blogId")
         loadDetail(blogId)
+
+        // Share button
+        binding.btnShare.setOnClickListener {
+            shareContent()
+        }
     }
 
     private fun loadDetail(id: String) {
@@ -67,8 +75,12 @@ class BlogDetailActivity : AppCompatActivity() {
                     ?: snap.child("gambar").getValue(String::class.java)
                     ?: snap.child("thumbnail").getValue(String::class.java)
 
+                currentBlogTitle = title
+                currentBlogContent = content
+
                 binding.tvTitle.text = title
-                binding.tvAuthor.text = author
+                binding.tvTitleOverlay.text = title
+                binding.tvAuthor.text = "Oleh: $author"
                 binding.tvContent.text = content
 
                 val url = imageUrl?.trim().takeIf { !it.isNullOrEmpty() }
@@ -78,12 +90,29 @@ class BlogDetailActivity : AppCompatActivity() {
                         .centerCrop()
                         .into(binding.imgCover)
                 } else {
-                    // kalau thumbnailUrl kosong, ya wajar gambar tetap placeholder
                     binding.imgCover.setImageResource(android.R.drawable.ic_menu_gallery)
                 }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Gagal ambil data: ${e.message}", Toast.LENGTH_LONG).show()
             }
+    }
+
+    private fun shareContent() {
+        val shareText = """
+            📝 $currentBlogTitle
+            
+            ${currentBlogContent.take(200)}${if (currentBlogContent.length > 200) "..." else ""}
+            
+            Baca selengkapnya di aplikasi MPU6050 Blog!
+        """.trimIndent()
+
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, shareText)
+            type = "text/plain"
+        }
+
+        startActivity(Intent.createChooser(shareIntent, "Bagikan blog via"))
     }
 }

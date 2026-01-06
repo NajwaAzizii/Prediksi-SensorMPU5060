@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +19,6 @@ import java.util.Locale
 
 class BlogListUserActivity : AppCompatActivity() {
 
-    // ✅ URL RTDB kamu
     private val DATABASE_URL = "https://dbmpu5060-default-rtdb.firebaseio.com"
     private val BLOG_NODE = "blogs"
 
@@ -26,7 +26,6 @@ class BlogListUserActivity : AppCompatActivity() {
         FirebaseDatabase.getInstance(DATABASE_URL).reference.child(BLOG_NODE)
     }
 
-    // Ambil semua lalu sort by createdAt (paling aman)
     private val query: Query by lazy {
         dbRef.orderByChild("createdAt")
     }
@@ -41,7 +40,7 @@ class BlogListUserActivity : AppCompatActivity() {
     )
 
     private lateinit var rv: RecyclerView
-    private lateinit var tvEmpty: TextView
+    private lateinit var emptyState: LinearLayout
 
     private lateinit var btnBack: View
     private lateinit var btnSearch: View
@@ -65,7 +64,7 @@ class BlogListUserActivity : AppCompatActivity() {
         setContentView(R.layout.activity_blog_list_user)
 
         rv = findViewById(R.id.rvBlogUser)
-        tvEmpty = findViewById(R.id.tvEmpty)
+        emptyState = findViewById(R.id.emptyState)
 
         btnBack = findViewById(R.id.btnBack)
         btnSearch = findViewById(R.id.btnSearch)
@@ -156,7 +155,6 @@ class BlogListUserActivity : AppCompatActivity() {
                     list.add(BlogItem(id, title, author, content, thumb, createdAt))
                 }
 
-                // newest -> oldest
                 val sorted = list.sortedWith(
                     compareByDescending<BlogItem> { it.createdAt }
                         .thenByDescending { it.id }
@@ -165,7 +163,6 @@ class BlogListUserActivity : AppCompatActivity() {
                 allBlogs.clear()
                 allBlogs.addAll(sorted)
 
-                // kalau lagi search, tetap filter
                 val q = etSearch.text?.toString()?.trim().orEmpty()
                 if (cardSearch.visibility == View.VISIBLE && q.isNotEmpty()) {
                     val filtered = allBlogs.filter {
@@ -180,8 +177,8 @@ class BlogListUserActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                tvEmpty.visibility = View.VISIBLE
-                tvEmpty.text = "Gagal load blog: ${error.message}"
+                emptyState.visibility = View.VISIBLE
+                rv.visibility = View.GONE
             }
         }
 
@@ -189,12 +186,15 @@ class BlogListUserActivity : AppCompatActivity() {
     }
 
     private fun renderList(list: List<BlogItem>) {
-        tvEmpty.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
-        if (list.isEmpty()) tvEmpty.text = "Belum ada blog."
+        if (list.isEmpty()) {
+            emptyState.visibility = View.VISIBLE
+            rv.visibility = View.GONE
+        } else {
+            emptyState.visibility = View.GONE
+            rv.visibility = View.VISIBLE
+        }
         adapter.submit(list, dateFmt)
     }
-
-    // ---------------- Adapter ----------------
 
     private class BlogUserAdapter(
         private val onOpenDetail: (String) -> Unit
@@ -228,7 +228,7 @@ class BlogListUserActivity : AppCompatActivity() {
             private val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
             private val tvDate: TextView = itemView.findViewById(R.id.tvDate)
             private val tvSnippet: TextView = itemView.findViewById(R.id.tvSnippet)
-            private val tvViewMore: TextView = itemView.findViewById(R.id.tvViewMore)
+            private val tvViewMore: View = itemView.findViewById(R.id.tvViewMore)
 
             fun bind(item: BlogItem, dateFmt: SimpleDateFormat, onOpenDetail: (String) -> Unit) {
                 tvTitle.text = item.title
@@ -240,7 +240,6 @@ class BlogListUserActivity : AppCompatActivity() {
                 }
                 tvDate.text = dateText
 
-                // snippet max 2 baris udah di XML
                 tvSnippet.text = item.content.trim().ifEmpty { "-" }
 
                 val url = item.thumbnailUrl?.trim().takeIf { !it.isNullOrEmpty() }

@@ -4,81 +4,65 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F8FF">
+    android:background="@drawable/bg_onboarding_gradient">
 
-    <!-- Bubble kiri atas (copy dari login) -->
+    <!-- Decorative circles -->
     <View
-        android:id="@+id/bubbleTopLeftBig"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:alpha="0.55"
-        android:background="@drawable/bg_login_bubble"
-        android:translationX="-110dp"
-        android:translationY="-60dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:alpha="0.15"
+        android:background="@drawable/bg_wave_decoration"
+        android:translationX="-60dp"
+        android:translationY="-40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/bubbleTopLeftSmall"
-        android:layout_width="200dp"
-        android:layout_height="210dp"
-        android:alpha="0.45"
-        android:background="@drawable/bg_login_bubble"
-        android:translationX="20dp"
-        android:translationY="-135dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Bubble kanan bawah (copy dari login) -->
-    <View
-        android:id="@+id/bubbleBottomRightBig"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
-        android:alpha="0.55"
-        android:background="@drawable/bg_login_bubble"
-        android:translationX="10dp"
-        android:translationY="150dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <View
-        android:id="@+id/bubbleBottomRightSmall"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:alpha="0.45"
-        android:background="@drawable/bg_login_bubble"
-        android:translationX="70dp"
-        android:translationY="20dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:alpha="0.1"
+        android:background="@drawable/bg_wave_decoration"
+        android:translationX="60dp"
+        android:translationY="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <!-- Top bar -->
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="Kembali"
-        android:padding="10dp"
-        android:src="@drawable/kembali"
-        app:tint="#3D63FF"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvPage"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Detail Blog"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="#1F2A44"
-        app:layout_constraintStart_toEndOf="@id/btnBack"
-        app:layout_constraintTop_toTopOf="@id/btnBack"
-        app:layout_constraintBottom_toBottomOf="@id/btnBack"
-        android:layout_marginStart="6dp"/>
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Kembali"
+            android:padding="10dp"
+            android:src="@drawable/kembali"
+            app:tint="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tvPage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="Detail Blog"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <!-- Scroll content -->
     <androidx.core.widget.NestedScrollView
@@ -88,7 +72,7 @@
         android:fillViewport="true"
         android:clipToPadding="false"
         android:paddingBottom="24dp"
-        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -96,80 +80,173 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp">
 
-            <!-- Foto besar full kiri kanan -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:strokeColor="#9CC2FF"
-                app:strokeWidth="1dp"
-                app:cardBackgroundColor="@android:color/white">
-
-                <ImageView
-                    android:id="@+id/imgCover"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@android:drawable/ic_menu_gallery"/>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Card teks -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- Cover Image Card -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="12dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:strokeColor="#E3E7F6"
-                app:strokeWidth="1dp"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="16dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imgCover"
+                        android:layout_width="0dp"
+                        android:layout_height="240dp"
+                        android:scaleType="centerCrop"
+                        android:src="@android:drawable/ic_menu_gallery"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <!-- Gradient overlay for better text visibility -->
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/bg_button_modern"
+                        android:alpha="0.7"
+                        app:layout_constraintTop_toTopOf="@id/imgCover"
+                        app:layout_constraintBottom_toBottomOf="@id/imgCover"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <!-- Title overlay -->
+                    <TextView
+                        android:id="@+id/tvTitleOverlay"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:text="Judul Blog"
+                        android:textColor="@android:color/white"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:shadowColor="#80000000"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="8"
+                        app:layout_constraintBottom_toBottomOf="@id/imgCover"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Content Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="12dp"
                 app:cardBackgroundColor="@android:color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
+                    <!-- Title -->
                     <TextView
                         android:id="@+id/tvTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Judul"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="#1F2A44"/>
+                        android:text="Judul Blog"
+                        android:textColor="#1e3c72"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
 
-                    <TextView
-                        android:id="@+id/tvAuthor"
-                        android:layout_width="match_parent"
+                    <!-- Author Badge -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="Penulis"
-                        android:textSize="12sp"
-                        android:textColor="#8A94A6"/>
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_section_badge"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="7dp">
 
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:contentDescription="Author"
+                            android:src="@android:drawable/ic_menu_edit"
+                            app:tint="@android:color/white" />
+
+                        <TextView
+                            android:id="@+id/tvAuthor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="7dp"
+                            android:text="Penulis"
+                            android:textColor="@android:color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <!-- Divider -->
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="10dp" />
+                        android:layout_height="1dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="#E5E7EB" />
 
+                    <!-- Content -->
                     <TextView
                         android:id="@+id/tvContent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Isi blog..."
-                        android:textSize="14sp"
-                        android:textColor="#222222"
+                        android:textColor="#374151"
+                        android:textSize="15sp"
                         android:lineSpacingExtra="4dp"/>
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Share Button (Optional Feature) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btnShare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_button_modern"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:contentDescription="Share"
+                        android:src="@android:drawable/ic_menu_share"
+                        app:tint="@android:color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="Bagikan Blog Ini"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
