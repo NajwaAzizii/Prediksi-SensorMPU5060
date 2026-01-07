@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.najwa_belajarnavigationdrawer.databinding.ItemBlogBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class BlogAdapter(
     private val items: MutableList<BlogPost>,
@@ -14,6 +17,8 @@ class BlogAdapter(
     private val onDelete: (BlogPost) -> Unit,
     private val onViewMore: (BlogPost) -> Unit
 ) : RecyclerView.Adapter<BlogAdapter.VH>() {
+
+    private val dateFmt = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
 
     inner class VH(val binding: ItemBlogBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -30,6 +35,15 @@ class BlogAdapter(
 
         b.tvTitle.text = post.title.orEmpty()
 
+        // ✅ TANGGAL (createdAt)
+        val createdAtRaw = post.createdAt ?: 0L
+        val createdAtMillis =
+            if (createdAtRaw in 1..9_999_999_999L) createdAtRaw * 1000L else createdAtRaw
+
+        b.tvDate.text =
+            if (createdAtMillis > 0L) dateFmt.format(Date(createdAtMillis))
+            else "Tanggal tidak tersedia"
+
         // ✅ bersihkan request glide sebelumnya (biar tidak nyangkut)
         Glide.with(b.imgThumb.context).clear(b.imgThumb)
         b.imgThumb.setImageResource(android.R.drawable.ic_menu_gallery)
@@ -38,7 +52,6 @@ class BlogAdapter(
         val url = post.thumbnailUrl.orEmpty().trim()
 
         if (b64.isNotEmpty()) {
-            // Base64 -> Bitmap
             try {
                 val clean = b64
                     .removePrefix("data:image/jpeg;base64,")
@@ -59,7 +72,6 @@ class BlogAdapter(
                 }
             }
         } else if (url.isNotEmpty()) {
-            // fallback URL (kalau SSL nya aman)
             Glide.with(b.imgThumb.context)
                 .load(url)
                 .centerCrop()

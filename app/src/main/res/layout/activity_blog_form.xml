@@ -5,30 +5,107 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F8FF"
+    android:background="@drawable/bg_onboarding_gradient"
     tools:context=".BlogFormActivity">
 
-    <!-- HEADER BIRU (dibuat lebih turun/lebar) -->
+    <!-- ===== Decorative waves (tema sama seperti onboarding) ===== -->
+    <View
+        android:id="@+id/decoTopLeft"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_marginStart="-80dp"
+        android:layout_marginTop="-80dp"
+        android:alpha="0.35"
+        android:background="@drawable/bg_wave_decoration"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <View
+        android:id="@+id/decoTopRight"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginEnd="-60dp"
+        android:layout_marginTop="90dp"
+        android:alpha="0.25"
+        android:background="@drawable/bg_wave_decoration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <View
+        android:id="@+id/decoBottomLeft"
+        android:layout_width="190dp"
+        android:layout_height="190dp"
+        android:layout_marginStart="-70dp"
+        android:layout_marginBottom="90dp"
+        android:alpha="0.22"
+        android:background="@drawable/bg_wave_decoration"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <View
+        android:id="@+id/decoBottomRight"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="-60dp"
+        android:alpha="0.20"
+        android:background="@drawable/bg_wave_decoration"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- ===== HEADER (tetap ada, id sama) ===== -->
     <View
         android:id="@+id/headerBlue"
         android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:background="#5FA8FF"
-        android:elevation="0dp"
+        android:layout_height="180dp"
+        android:alpha="0.20"
+        android:background="@drawable/bg_wave_decoration"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- BUBBLE KIRI ATAS (HANYA INI, dan warnanya biru muda) -->
+    <!-- Back (id sama) -->
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/bg_skip_button"
+        android:contentDescription="Kembali"
+        android:padding="10dp"
+        android:src="@drawable/kembali"
+        app:tint="@android:color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/headerBlue"
+        app:layout_constraintBottom_toBottomOf="@id/headerBlue"/>
+
+    <!-- Title (id sama) -->
+    <TextView
+        android:id="@+id/tvHeaderTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="Blog"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:shadowColor="#60000000"
+        android:shadowDx="0"
+        android:shadowDy="4"
+        android:shadowRadius="8"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintTop_toTopOf="@id/btnBack"
+        app:layout_constraintBottom_toBottomOf="@id/btnBack"/>
+
+    <!-- ===== Bubbles (id lama tetap ada, hanya ganti style biar senada) ===== -->
     <View
         android:id="@+id/bubbleTopLeftBig"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:alpha="0.45"
-        android:background="@drawable/bg_bubble_blue"
+        android:alpha="0.18"
+        android:background="@drawable/bg_wave_decoration"
         android:translationX="-100dp"
         android:translationY="-80dp"
-        android:elevation="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -36,59 +113,28 @@
         android:id="@+id/bubbleTopLeftSmall"
         android:layout_width="200dp"
         android:layout_height="210dp"
-        android:alpha="0.30"
-        android:background="@drawable/bg_bubble_blue"
+        android:alpha="0.12"
+        android:background="@drawable/bg_wave_decoration"
         android:translationX="20dp"
         android:translationY="-150dp"
-        android:elevation="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <!-- Back -->
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="12dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="Kembali"
-        android:padding="10dp"
-        android:src="@drawable/kembali"
-        android:elevation="4dp"
-        app:tint="@android:color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/headerBlue"
-        app:layout_constraintBottom_toBottomOf="@id/headerBlue"/>
-
-    <!-- Title -->
-    <TextView
-        android:id="@+id/tvHeaderTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Blog"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="@android:color/white"
-        android:layout_marginStart="10dp"
-        android:elevation="4dp"
-        app:layout_constraintStart_toEndOf="@id/btnBack"
-        app:layout_constraintTop_toTopOf="@id/btnBack"
-        app:layout_constraintBottom_toBottomOf="@id/btnBack"/>
-
-    <!-- CARD PUTIH (lebih turun biar header biru terlihat lebih lebar) -->
+    <!-- ===== CARD FORM (id sama) ===== -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardForm"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="-44dp"
+        android:layout_marginTop="-52dp"
         android:layout_marginBottom="16dp"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="3dp"
+        app:cardCornerRadius="26dp"
+        app:cardElevation="18dp"
+        app:cardUseCompatPadding="true"
         app:strokeWidth="1dp"
-        app:strokeColor="#E3E7F6"
-        app:cardBackgroundColor="@android:color/white"
+        app:strokeColor="#22FFFFFF"
+        app:cardBackgroundColor="#F8FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/headerBlue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -99,9 +145,9 @@
             android:layout_height="match_parent"
             android:fillViewport="true"
             android:clipToPadding="false"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
-            android:paddingTop="30dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="24dp"
             android:paddingBottom="18dp">
 
             <LinearLayout
@@ -116,20 +162,20 @@
                     android:text="Judul"
                     android:textStyle="bold"
                     android:textSize="12sp"
-                    android:textColor="#1F2A44"/>
+                    android:textColor="#1e3c72"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilTitle"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    app:boxCornerRadiusTopStart="20dp"
-                    app:boxCornerRadiusTopEnd="20dp"
-                    app:boxCornerRadiusBottomStart="20dp"
-                    app:boxCornerRadiusBottomEnd="20dp"
-                    app:boxStrokeColor="@color/blog_input"
-                    app:boxBackgroundColor="@android:color/white"
+                    android:layout_marginTop="8dp"
+                    app:boxCornerRadiusTopStart="18dp"
+                    app:boxCornerRadiusTopEnd="18dp"
+                    app:boxCornerRadiusBottomStart="18dp"
+                    app:boxCornerRadiusBottomEnd="18dp"
+                    app:boxStrokeColor="#7e22ce"
+                    app:boxBackgroundColor="#F9FAFB"
                     app:boxStrokeWidth="1.5dp"
                     app:boxStrokeWidthFocused="2dp"
                     app:hintEnabled="false">
@@ -139,36 +185,42 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Masukkan Judul Disini"
-                        android:padding="12dp"
-                        android:textColor="#222222"
-                        android:textSize="13sp"/>
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingTop="14dp"
+                        android:paddingBottom="14dp"
+                        android:textColor="#1e3c72"
+                        android:textColorHint="#94a3b8"
+                        android:textSize="14sp"
+                        android:background="@null"
+                        android:includeFontPadding="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="12dp"/>
+                    android:layout_height="14dp"/>
 
-                <!-- Isi (dibuat lebih kecil seperti template) -->
+                <!-- Isi -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Isi"
                     android:textStyle="bold"
                     android:textSize="12sp"
-                    android:textColor="#1F2A44"/>
+                    android:textColor="#1e3c72"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilContent"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    app:boxCornerRadiusTopStart="20dp"
-                    app:boxCornerRadiusTopEnd="20dp"
-                    app:boxCornerRadiusBottomStart="20dp"
-                    app:boxCornerRadiusBottomEnd="20dp"
-                    app:boxStrokeColor="@color/blog_input"
-                    app:boxBackgroundColor="@android:color/white"
+                    android:layout_marginTop="8dp"
+                    app:boxCornerRadiusTopStart="18dp"
+                    app:boxCornerRadiusTopEnd="18dp"
+                    app:boxCornerRadiusBottomStart="18dp"
+                    app:boxCornerRadiusBottomEnd="18dp"
+                    app:boxStrokeColor="#7e22ce"
+                    app:boxBackgroundColor="#F9FAFB"
                     app:boxStrokeWidth="1.5dp"
                     app:boxStrokeWidthFocused="2dp"
                     app:hintEnabled="false">
@@ -179,14 +231,20 @@
                         android:layout_height="wrap_content"
                         android:gravity="top"
                         android:hint="Masukkan isi Blog disini"
-                        android:padding="12dp"
-                        android:textColor="#222222"
-                        android:textSize="13sp" />
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingTop="14dp"
+                        android:paddingBottom="14dp"
+                        android:textColor="#1e3c72"
+                        android:textColorHint="#94a3b8"
+                        android:textSize="14sp"
+                        android:background="@null"
+                        android:includeFontPadding="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="12dp"/>
+                    android:layout_height="14dp"/>
 
                 <!-- Penulis -->
                 <TextView
@@ -195,20 +253,20 @@
                     android:text="Penulis"
                     android:textStyle="bold"
                     android:textSize="12sp"
-                    android:textColor="#1F2A44"/>
+                    android:textColor="#1e3c72"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilAuthor"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    app:boxCornerRadiusTopStart="20dp"
-                    app:boxCornerRadiusTopEnd="20dp"
-                    app:boxCornerRadiusBottomStart="20dp"
-                    app:boxCornerRadiusBottomEnd="20dp"
-                    app:boxStrokeColor="@color/blog_input"
-                    app:boxBackgroundColor="@android:color/white"
+                    android:layout_marginTop="8dp"
+                    app:boxCornerRadiusTopStart="18dp"
+                    app:boxCornerRadiusTopEnd="18dp"
+                    app:boxCornerRadiusBottomStart="18dp"
+                    app:boxCornerRadiusBottomEnd="18dp"
+                    app:boxStrokeColor="#7e22ce"
+                    app:boxBackgroundColor="#F9FAFB"
                     app:boxStrokeWidth="1.5dp"
                     app:boxStrokeWidthFocused="2dp"
                     app:hintEnabled="false">
@@ -218,65 +276,72 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Masukkan Nama Penulis"
-                        android:padding="12dp"
-                        android:textColor="#222222"
-                        android:textSize="13sp"/>
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingTop="14dp"
+                        android:paddingBottom="14dp"
+                        android:textColor="#1e3c72"
+                        android:textColorHint="#94a3b8"
+                        android:textSize="14sp"
+                        android:background="@null"
+                        android:includeFontPadding="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="14dp"/>
+                    android:layout_height="16dp"/>
 
-                <!-- Thumbnail (dibuat lebih kecil) -->
+                <!-- Thumbnail -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Thumbnail"
                     android:textStyle="bold"
                     android:textSize="12sp"
-                    android:textColor="#1F2A44"/>
+                    android:textColor="#1e3c72"/>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardPickThumb"
                     android:layout_width="match_parent"
-                    android:layout_height="107dp"
-                    android:layout_marginTop="8dp"
-                    app:cardBackgroundColor="#F9FBFF"
-                    app:cardCornerRadius="14dp"
+                    android:layout_height="118dp"
+                    android:layout_marginTop="10dp"
+                    app:cardBackgroundColor="#F3F0FF"
+                    app:cardCornerRadius="18dp"
                     app:cardElevation="0dp"
-                    app:strokeColor="#9CC2FF"
+                    app:strokeColor="#C4B5FD"
                     app:strokeWidth="1dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="12dp">
+                        android:padding="14dp">
 
                         <ImageView
                             android:id="@+id/imgThumb"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
                             android:layout_marginTop="8dp"
                             android:src="@android:drawable/ic_menu_gallery"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:tint="#8A94A6" />
+                            app:tint="#7e22ce" />
 
                         <TextView
                             android:id="@+id/tvPickInfo"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="8dp"
                             android:gravity="center"
-                            android:text="Klik untuk mengunggah  atau seret dan jatuhkan\nJPG, JPEG, PNG kurang dari 1MB"
-                            android:textColor="#5C6A86"
-                            android:textSize="11sp"
+                            android:text="Klik untuk mengunggah\nJPG, JPEG, PNG (≤ 1MB)"
+                            android:textColor="#5b21b6"
+                            android:textSize="12sp"
+                            android:alpha="0.85"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/imgThumb" />
 
-                        <!-- tombol transparan agar seluruh area bisa diklik -->
+                        <!-- tombol transparan agar seluruh area bisa diklik (id sama) -->
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnPickImage"
                             android:layout_width="0dp"
@@ -297,20 +362,21 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="16dp"/>
+                    android:layout_height="18dp"/>
 
-                <!-- Simpan -->
+                <!-- Simpan (id sama) -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSave"
                     android:layout_width="match_parent"
-                    android:layout_height="46dp"
+                    android:layout_height="54dp"
                     android:text="Simpan"
                     android:textAllCaps="false"
                     android:textStyle="bold"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
                     android:textColor="@android:color/white"
-                    app:backgroundTint="#5FA8FF"
-                    app:cornerRadius="14dp"/>
+                    app:backgroundTint="#7e22ce"
+                    app:cornerRadius="18dp"
+                    app:elevation="6dp"/>
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

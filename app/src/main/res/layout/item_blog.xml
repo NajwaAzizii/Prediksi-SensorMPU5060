@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
+    android:layout_marginHorizontal="6dp"
     android:layout_marginVertical="4dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="4dp"
-    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="22dp"
+    app:cardElevation="6dp"
+    app:cardUseCompatPadding="false"
     app:strokeWidth="1dp"
-    app:strokeColor="#9CC2FF"
-    app:cardBackgroundColor="@android:color/white">
+    app:strokeColor="#22FFFFFF"
+    app:cardBackgroundColor="#F8FFFFFF">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp">
+        android:padding="14dp">
 
-        <!-- Thumbnail rounded -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardThumb"
-            android:layout_width="78dp"
-            android:layout_height="78dp"
-            app:cardCornerRadius="14dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
             app:cardUseCompatPadding="false"
+            app:strokeWidth="1dp"
+            app:strokeColor="#C4B5FD"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -42,78 +42,102 @@
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="12dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="Judul Blog"
-            android:textColor="#1F2A44"
-            android:textSize="14sp"
+            android:textColor="#1E3A8A"
+            android:textSize="15sp"
             android:textStyle="bold"
+            android:includeFontPadding="false"
             app:layout_constraintEnd_toStartOf="@id/tvViewMore"
             app:layout_constraintStart_toEndOf="@id/cardThumb"
             app:layout_constraintTop_toTopOf="@id/cardThumb" />
+
+        <!-- Date -->
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:text="01 Jan 2026"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="#4C1D95"
+            android:alpha="1"
+            android:includeFontPadding="false"
+            android:drawableStart="@android:drawable/ic_menu_my_calendar"
+            android:drawablePadding="6dp"
+            android:drawableTint="#4C1D95"
+            app:layout_constraintStart_toEndOf="@id/cardThumb"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintEnd_toStartOf="@id/tvViewMore"/>
 
         <!-- Action buttons -->
         <LinearLayout
             android:id="@+id/actionRow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toStartOf="@id/tvViewMore"
             app:layout_constraintStart_toEndOf="@id/cardThumb"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle">
+            app:layout_constraintTop_toBottomOf="@id/tvDate">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEdit"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="34dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minHeight="0dp"
                 android:minWidth="0dp"
-                android:paddingHorizontal="14dp"
+                android:paddingHorizontal="16dp"
                 android:text="Edit"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                app:backgroundTint="#F0C53A"
-                app:cornerRadius="999dp" />
+                app:backgroundTint="#F59E0B"
+                app:cornerRadius="999dp"
+                app:elevation="6dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDelete"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginStart="8dp"
+                android:layout_height="34dp"
+                android:layout_marginStart="10dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minHeight="0dp"
                 android:minWidth="0dp"
-                android:paddingHorizontal="14dp"
+                android:paddingHorizontal="16dp"
                 android:text="Hapus"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 app:backgroundTint="#FF5A6B"
-                app:cornerRadius="999dp" />
+                app:cornerRadius="999dp"
+                app:elevation="6dp" />
         </LinearLayout>
 
-        <!-- view more (kanan bawah) -->
+        <!-- view more -->
         <TextView
             android:id="@+id/tvViewMore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="2dp"
-            android:paddingStart="6dp"
-            android:paddingEnd="6dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
             android:text="view more"
             android:textSize="11sp"
-            android:textColor="@color/view_more_selector"
+            android:textStyle="bold"
+            android:textColor="#7E22CE"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -121,5 +145,4 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </com.google.android.material.card.MaterialCardView>
