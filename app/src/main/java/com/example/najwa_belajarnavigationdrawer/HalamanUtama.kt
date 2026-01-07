@@ -1,7 +1,9 @@
 package com.example.najwa_belajarnavigationdrawer
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -29,15 +31,12 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val BLOG_NODE = "blogs"
     private val DATABASE_URL = "https://dbmpu5060-default-rtdb.firebaseio.com"
 
-    private val db: FirebaseDatabase by lazy {
-        FirebaseDatabase.getInstance(DATABASE_URL)
-    }
     private val blogsRef: DatabaseReference by lazy {
-        db.reference.child(BLOG_NODE)
+        FirebaseDatabase.getInstance(DATABASE_URL).reference.child(BLOG_NODE)
     }
-    private val latestQuery: Query by lazy {
-        blogsRef.orderByChild("createdAt")
-    }
+
+    // ambil semua, kita sort manual descending
+    private val latestQuery: Query by lazy { blogsRef.orderByChild("createdAt") }
     private var latestListener: ValueEventListener? = null
 
     private data class BlogItem(
@@ -46,6 +45,7 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val author: String,
         val content: String,
         val imageUrl: String?,
+        val thumbBase64: String?,
         val createdAt: Long
     )
 
@@ -66,7 +66,7 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var tvBlogAuthor2: TextView? = null
     private var tvBlogAuthor3: TextView? = null
 
-    // Hidden compatibility views
+    // Hidden compatibility views (tidak dipakai, tapi kamu simpan)
     private var blogViewPager: ViewPager2? = null
     private var indicator1: View? = null
     private var indicator2: View? = null
@@ -136,36 +136,29 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun bindBlogCards(view: View) {
-        try {
-            cardBlog1 = view.findViewById(R.id.cardBlog1)
-            cardBlog2 = view.findViewById(R.id.cardBlog2)
-            cardBlog3 = view.findViewById(R.id.cardBlog3)
+        cardBlog1 = view.findViewById(R.id.cardBlog1)
+        cardBlog2 = view.findViewById(R.id.cardBlog2)
+        cardBlog3 = view.findViewById(R.id.cardBlog3)
 
-            ivBlog1 = view.findViewById(R.id.ivBlog1)
-            ivBlog2 = view.findViewById(R.id.ivBlog2)
-            ivBlog3 = view.findViewById(R.id.ivBlog3)
+        ivBlog1 = view.findViewById(R.id.ivBlog1)
+        ivBlog2 = view.findViewById(R.id.ivBlog2)
+        ivBlog3 = view.findViewById(R.id.ivBlog3)
 
-            tvBlogTitle1 = view.findViewById(R.id.tvBlogTitle1)
-            tvBlogTitle2 = view.findViewById(R.id.tvBlogTitle2)
-            tvBlogTitle3 = view.findViewById(R.id.tvBlogTitle3)
+        tvBlogTitle1 = view.findViewById(R.id.tvBlogTitle1)
+        tvBlogTitle2 = view.findViewById(R.id.tvBlogTitle2)
+        tvBlogTitle3 = view.findViewById(R.id.tvBlogTitle3)
 
-            tvBlogAuthor1 = view.findViewById(R.id.tvBlogAuthor1)
-            tvBlogAuthor2 = view.findViewById(R.id.tvBlogAuthor2)
-            tvBlogAuthor3 = view.findViewById(R.id.tvBlogAuthor3)
-        } catch (e: Exception) {
-            Log.w("HalamanUtama", "Blog cards setup", e)
-        }
+        tvBlogAuthor1 = view.findViewById(R.id.tvBlogAuthor1)
+        tvBlogAuthor2 = view.findViewById(R.id.tvBlogAuthor2)
+        tvBlogAuthor3 = view.findViewById(R.id.tvBlogAuthor3)
     }
 
     private fun bindCompatibilityViews(view: View) {
-        try {
-            blogViewPager = view.findViewById(R.id.blogViewPager)
-            indicator1 = view.findViewById(R.id.indicator1)
-            indicator2 = view.findViewById(R.id.indicator2)
-            indicator3 = view.findViewById(R.id.indicator3)
-        } catch (e: Exception) {
-            Log.w("HalamanUtama", "Compatibility views setup", e)
-        }
+        // aman kalau view-nya tidak ada
+        blogViewPager = view.findViewById(R.id.blogViewPager)
+        indicator1 = view.findViewById(R.id.indicator1)
+        indicator2 = view.findViewById(R.id.indicator2)
+        indicator3 = view.findViewById(R.id.indicator3)
     }
 
     private fun attachLatestBlogsListener() {
@@ -173,8 +166,6 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         latestListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                Log.d("HalamanUtama", "Firebase data: count=${snapshot.childrenCount}")
-
                 val list = mutableListOf<BlogItem>()
 
                 for (child in snapshot.children) {
@@ -199,11 +190,15 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         ?: child.child("gambar").getValue(String::class.java)
                         ?: child.child("thumbnail").getValue(String::class.java)
 
+                    val thumbBase64 = child.child("thumbnailBase64").getValue(String::class.java)
+                        ?: child.child("thumbBase64").getValue(String::class.java)
+
                     val createdAt = child.child("createdAt").getValue(Long::class.java)
                         ?: child.child("createdAt").getValue(String::class.java)?.toLongOrNull()
                         ?: 0L
 
-                    list.add(BlogItem(id, title, author, content, imageUrl, createdAt))
+                    // ✅ INI YANG MEMPERBAIKI ERROR KAMU
+                    list.add(BlogItem(id, title, author, content, imageUrl, thumbBase64, createdAt))
                 }
 
                 val sorted = list.sortedWith(
@@ -211,8 +206,6 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         .thenByDescending { it.id }
                 )
 
-                Log.d("HalamanUtama", "Total blogs: ${sorted.size}")
-                // Take only 3 latest blogs
                 update3BlogCards(sorted.take(3))
             }
 
@@ -250,17 +243,36 @@ class HalamanUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         tvTitle.text = blog.title
         tvAuthor.text = blog.author
 
-        val url = blog.imageUrl?.trim().takeIf { !it.isNullOrEmpty() }
-
-        Glide.with(this)
-            .load(url)
-            .placeholder(placeholderRes)
-            .error(placeholderRes)
-            .centerCrop()
-            .into(iv)
+        // ✅ BASE64 DULU, BARU URL
+        val b64 = blog.thumbBase64?.trim().orEmpty()
+        if (b64.isNotEmpty() && setImageFromBase64(b64, iv)) {
+            Glide.with(this).clear(iv)
+        } else {
+            val url = blog.imageUrl?.trim().takeIf { !it.isNullOrEmpty() }
+            Glide.with(this)
+                .load(url)
+                .placeholder(placeholderRes)
+                .error(placeholderRes)
+                .centerCrop()
+                .into(iv)
+        }
 
         card.setOnClickListener {
             startActivity(Intent(this, BlogDetailActivity::class.java).putExtra("BLOG_ID", blog.id))
+        }
+    }
+
+    private fun setImageFromBase64(b64Raw: String, target: ImageView): Boolean {
+        return try {
+            val clean = b64Raw.substringAfter("base64,", b64Raw)
+            val bytes = Base64.decode(clean, Base64.DEFAULT)
+            val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            if (bmp != null) {
+                target.setImageBitmap(bmp)
+                true
+            } else false
+        } catch (_: Exception) {
+            false
         }
     }
 

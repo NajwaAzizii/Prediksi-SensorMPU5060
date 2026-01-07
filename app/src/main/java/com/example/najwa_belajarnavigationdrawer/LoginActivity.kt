@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.example.najwa_belajarnavigationdrawer.databinding.ActivityLoginBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -15,7 +16,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val auth by lazy { FirebaseAuth.getInstance() }
 
-    // ✅ daftar email admin yang diizinkan (pakai lowercase semua)
+    // ✅ daftar email admin yang diizinkan (lowercase semua)
     private val adminEmails = setOf(
         "najwa23ti@mahasiswa.pcr.ac.id",
         "admin@gmail.com"
@@ -28,8 +29,17 @@ class LoginActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        binding.btnKembali.setOnClickListener { finish() }
+        // ✅ tombol kembali -> HalamanUtama (bukan keluar aplikasi)
+        binding.btnKembali.setOnClickListener { goHome() }
 
+        // ✅ back HP juga -> HalamanUtama
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                goHome()
+            }
+        })
+
+        // Enter/Done di password untuk login
         binding.etPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 doLogin()
@@ -38,9 +48,15 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnMasuk.setOnClickListener { doLogin() }
-
-        // ✅ Lupa Password
         binding.tvForgot.setOnClickListener { doForgotPassword() }
+    }
+
+    private fun goHome() {
+        val i = Intent(this, HalamanUtama::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+        startActivity(i)
+        finish()
     }
 
     private fun doForgotPassword() {

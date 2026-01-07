@@ -1,5 +1,7 @@
 package com.example.najwa_belajarnavigationdrawer
 
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -16,11 +18,7 @@ class BlogAdapter(
     inner class VH(val binding: ItemBlogBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val binding = ItemBlogBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
+        val binding = ItemBlogBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VH(binding)
     }
 
@@ -32,22 +30,45 @@ class BlogAdapter(
 
         b.tvTitle.text = post.title.orEmpty()
 
+        // ✅ bersihkan request glide sebelumnya (biar tidak nyangkut)
+        Glide.with(b.imgThumb.context).clear(b.imgThumb)
+        b.imgThumb.setImageResource(android.R.drawable.ic_menu_gallery)
 
-        // thumb
-        val url = post.thumbnailUrl.orEmpty()
-        if (url.isNotBlank()) {
+        val b64 = post.thumbnailBase64.orEmpty().trim()
+        val url = post.thumbnailUrl.orEmpty().trim()
+
+        if (b64.isNotEmpty()) {
+            // Base64 -> Bitmap
+            try {
+                val clean = b64
+                    .removePrefix("data:image/jpeg;base64,")
+                    .removePrefix("data:image/png;base64,")
+                    .trim()
+
+                val bytes = Base64.decode(clean, Base64.DEFAULT)
+                val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+
+                if (bmp != null) {
+                    b.imgThumb.setImageBitmap(bmp)
+                } else if (url.isNotEmpty()) {
+                    Glide.with(b.imgThumb.context).load(url).centerCrop().into(b.imgThumb)
+                }
+            } catch (_: Exception) {
+                if (url.isNotEmpty()) {
+                    Glide.with(b.imgThumb.context).load(url).centerCrop().into(b.imgThumb)
+                }
+            }
+        } else if (url.isNotEmpty()) {
+            // fallback URL (kalau SSL nya aman)
             Glide.with(b.imgThumb.context)
                 .load(url)
                 .centerCrop()
                 .into(b.imgThumb)
-        } else {
-            b.imgThumb.setImageResource(android.R.drawable.ic_menu_gallery)
         }
 
         b.btnEdit.setOnClickListener { onEdit(post) }
         b.btnDelete.setOnClickListener { onDelete(post) }
         b.tvViewMore.setOnClickListener { onViewMore(post) }
-
     }
 
     fun submit(newItems: List<BlogPost>) {

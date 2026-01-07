@@ -1,9 +1,9 @@
 package com.example.najwa_belajarnavigationdrawer
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.util.Base64
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -16,6 +16,8 @@ import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import android.text.Editable
+import android.text.TextWatcher
 
 class BlogListUserActivity : AppCompatActivity() {
 
@@ -36,6 +38,7 @@ class BlogListUserActivity : AppCompatActivity() {
         val author: String,
         val content: String,
         val thumbnailUrl: String?,
+        val thumbnailBase64: String?,   // ✅ tambah ini
         val createdAt: Long
     )
 
@@ -56,7 +59,6 @@ class BlogListUserActivity : AppCompatActivity() {
     )
 
     private var listener: ValueEventListener? = null
-
     private val dateFmt = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,8 +95,7 @@ class BlogListUserActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 val q = s?.toString()?.trim().orEmpty()
                 if (q.isEmpty()) {
-                    renderList(allBlogs)
-                    return
+                    renderList(allBlogs); return
                 }
                 val filtered = allBlogs.filter {
                     it.title.contains(q, true) ||
@@ -143,16 +144,20 @@ class BlogListUserActivity : AppCompatActivity() {
                         ?: child.child("deskripsi").getValue(String::class.java)
                         ?: ""
 
-                    val thumb = child.child("thumbnailUrl").getValue(String::class.java)
+                    val thumbUrl = child.child("thumbnailUrl").getValue(String::class.java)
                         ?: child.child("thumbnail").getValue(String::class.java)
                         ?: child.child("imageUrl").getValue(String::class.java)
                         ?: child.child("gambar").getValue(String::class.java)
+
+                    // ✅ ambil base64 juga
+                    val thumbBase64 = child.child("thumbnailBase64").getValue(String::class.java)
+                        ?: child.child("thumbBase64").getValue(String::class.java)
 
                     val createdAt = child.child("createdAt").getValue(Long::class.java)
                         ?: child.child("timestamp").getValue(Long::class.java)
                         ?: 0L
 
-                    list.add(BlogItem(id, title, author, content, thumb, createdAt))
+                    list.add(BlogItem(id, title, author, content, thumbUrl, thumbBase64, createdAt))
                 }
 
                 val sorted = list.sortedWith(
@@ -232,28 +237,41 @@ class BlogListUserActivity : AppCompatActivity() {
 
             fun bind(item: BlogItem, dateFmt: SimpleDateFormat, onOpenDetail: (String) -> Unit) {
                 tvTitle.text = item.title
-
-                val dateText = if (item.createdAt > 0) {
-                    dateFmt.format(Date(item.createdAt))
-                } else {
-                    "Tanggal tidak tersedia"
-                }
-                tvDate.text = dateText
-
+                tvDate.text = if (item.createdAt > 0) dateFmt.format(Date(item.createdAt)) else "Tanggal tidak tersedia"
                 tvSnippet.text = item.content.trim().ifEmpty { "-" }
 
-                val url = item.thumbnailUrl?.trim().takeIf { !it.isNullOrEmpty() }
-
-                Glide.with(itemView.context)
-                    .load(url)
-                    .placeholder(android.R.drawable.ic_menu_gallery)
-                    .error(android.R.drawable.ic_menu_gallery)
-                    .centerCrop()
-                    .into(imgCover)
+                // ✅ 1) base64 dulu
+                val b64 = item.thumbnailBase64?.trim().orEmpty()
+                if (b64.isNotEmpty() && setImageFromBase64(b64, imgCover)) {
+                    Glide.with(itemView.context).clear(imgCover) // pastikan request glide sebelumnya tidak ganggu
+                } else {
+                    // ✅ 2) fallback URL
+                    val url = item.thumbnailUrl?.trim().takeIf { !it.isNullOrEmpty() }
+                    Glide.with(itemView.context)
+                        .load(url)
+                        .placeholder(android.R.drawable.ic_menu_gallery)
+                        .error(android.R.drawable.ic_menu_gallery)
+                        .centerCrop()
+                        .into(imgCover)
+                }
 
                 val click = View.OnClickListener { onOpenDetail(item.id) }
                 tvViewMore.setOnClickListener(click)
                 cardRoot.setOnClickListener(click)
+            }
+
+            private fun setImageFromBase64(b64Raw: String, target: ImageView): Boolean {
+                return try {
+                    val clean = b64Raw.substringAfter("base64,", b64Raw)
+                    val bytes = Base64.decode(clean, Base64.DEFAULT)
+                    val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    if (bmp != null) {
+                        target.setImageBitmap(bmp)
+                        true
+                    } else false
+                } catch (_: Exception) {
+                    false
+                }
             }
         }
     }

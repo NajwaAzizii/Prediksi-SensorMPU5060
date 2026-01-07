@@ -1,7 +1,9 @@
 package com.example.najwa_belajarnavigationdrawer
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -41,10 +43,7 @@ class BlogDetailActivity : AppCompatActivity() {
         Log.d("BlogDetailActivity", "Open blogId=$blogId")
         loadDetail(blogId)
 
-        // Share button
-        binding.btnShare.setOnClickListener {
-            shareContent()
-        }
+        binding.btnShare.setOnClickListener { shareContent() }
     }
 
     private fun loadDetail(id: String) {
@@ -70,10 +69,16 @@ class BlogDetailActivity : AppCompatActivity() {
                     ?: snap.child("deskripsi").getValue(String::class.java)
                     ?: ""
 
+                val createdAt = snap.child("createdAt").getValue(Long::class.java) ?: 0L
+
                 val imageUrl = snap.child("thumbnailUrl").getValue(String::class.java)
                     ?: snap.child("imageUrl").getValue(String::class.java)
                     ?: snap.child("gambar").getValue(String::class.java)
                     ?: snap.child("thumbnail").getValue(String::class.java)
+
+                // ✅ INI YANG PENTING: ambil base64 juga
+                val thumbBase64 = snap.child("thumbnailBase64").getValue(String::class.java)
+                    ?: snap.child("thumbBase64").getValue(String::class.java)
 
                 currentBlogTitle = title
                 currentBlogContent = content
@@ -83,10 +88,25 @@ class BlogDetailActivity : AppCompatActivity() {
                 binding.tvAuthor.text = "Oleh: $author"
                 binding.tvContent.text = content
 
+                // ✅ Prioritas base64 dulu (biar pasti tampil)
+                val b64 = thumbBase64?.trim().orEmpty()
+                if (b64.isNotEmpty()) {
+                    if (!setImageFromBase64(b64)) {
+                        binding.imgCover.setImageResource(android.R.drawable.ic_menu_gallery)
+                    }
+                    return@addOnSuccessListener
+                }
+
+                // Fallback ke URL
                 val url = imageUrl?.trim().takeIf { !it.isNullOrEmpty() }
                 if (url != null) {
+                    // cache-bust pakai createdAt biar gambar baru kebaca
+                    val busted = cacheBust(url, createdAt)
+
                     Glide.with(this)
-                        .load(url)
+                        .load(busted)
+                        .placeholder(android.R.drawable.ic_menu_gallery)
+                        .error(android.R.drawable.ic_menu_gallery)
                         .centerCrop()
                         .into(binding.imgCover)
                 } else {
@@ -96,6 +116,26 @@ class BlogDetailActivity : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Gagal ambil data: ${e.message}", Toast.LENGTH_LONG).show()
             }
+    }
+
+    private fun setImageFromBase64(b64Raw: String): Boolean {
+        return try {
+            // kalau ada prefix "data:image/jpeg;base64,..."
+            val clean = b64Raw.substringAfter("base64,", b64Raw)
+            val bytes = Base64.decode(clean, Base64.DEFAULT)
+            val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            if (bmp != null) {
+                binding.imgCover.setImageBitmap(bmp)
+                true
+            } else false
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    private fun cacheBust(url: String, createdAt: Long): String {
+        if (createdAt <= 0L) return url
+        return if (url.contains("?")) "$url&v=$createdAt" else "$url?v=$createdAt"
     }
 
     private fun shareContent() {

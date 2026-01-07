@@ -20,30 +20,33 @@ class BlogListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBlogListBinding
 
+    companion object {
+        private const val DB_URL = "https://dbmpu5060-default-rtdb.firebaseio.com"
+        private const val BLOG_NODE = "blogs"
+        private const val ADMIN_EMAIL = "admin@gmail.com"
+    }
+
     private val auth by lazy { FirebaseAuth.getInstance() }
-    private val dbRef by lazy { FirebaseDatabase.getInstance().reference.child("blogs") }
+
+    private val dbRef by lazy {
+        FirebaseDatabase.getInstance(DB_URL).reference.child(BLOG_NODE)
+    }
 
     private lateinit var adapter: BlogAdapter
-
-    // list master (semua data dari firebase)
     private var allBlogs: List<BlogPost> = emptyList()
-
-    // ✅ admin yang boleh akses (selalu lowercase)
-    private val adminEmail = "admin@gmail.com"
 
     override fun onStart() {
         super.onStart()
-
         val user = auth.currentUser
         val email = user?.email?.trim()?.lowercase()
 
-        if (user == null || email == null || email != adminEmail) {
+        if (user == null || email == null || email != ADMIN_EMAIL.lowercase()) {
             auth.signOut()
             Toast.makeText(this, "Akses hanya untuk admin", Toast.LENGTH_SHORT).show()
-
             startActivity(Intent(this, LoginActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             })
+            finish()
         }
     }
 
@@ -68,9 +71,8 @@ class BlogListActivity : AppCompatActivity() {
                     .show()
             },
             onViewMore = { post ->
-                // NOTE: kalau BlogDetailActivity kamu butuh BLOG_ID, kirim ini:
                 startActivity(Intent(this, BlogDetailActivity::class.java).apply {
-                    putExtra("BLOG_ID", post.id) // ini yang benar buat load dari firebase
+                    putExtra("BLOG_ID", post.id)
                 })
             }
         )
@@ -88,16 +90,12 @@ class BlogListActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             })
+            finish()
         }
 
-        // ===== SEARCH UI =====
-        binding.btnSearch.setOnClickListener {
-            toggleSearch()
-        }
-
-        binding.btnCloseSearch.setOnClickListener {
-            closeSearch()
-        }
+        // Search
+        binding.btnSearch.setOnClickListener { toggleSearch() }
+        binding.btnCloseSearch.setOnClickListener { closeSearch() }
 
         binding.etSearch.addTextChangedListener { text ->
             applyFilter(text?.toString().orEmpty())
@@ -113,9 +111,8 @@ class BlogListActivity : AppCompatActivity() {
         // Back: kalau search lagi terbuka, tutup dulu
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (binding.cardSearchBar.visibility == View.VISIBLE) {
-                    closeSearch()
-                } else {
+                if (binding.cardSearchBar.visibility == View.VISIBLE) closeSearch()
+                else {
                     isEnabled = false
                     onBackPressedDispatcher.onBackPressed()
                 }
@@ -139,7 +136,6 @@ class BlogListActivity : AppCompatActivity() {
                 list.reverse()
                 allBlogs = list
 
-                // kalau lagi search, tetap filter; kalau tidak, tampilkan semua
                 val q = binding.etSearch.text?.toString().orEmpty()
                 applyFilter(q)
             }
@@ -156,21 +152,16 @@ class BlogListActivity : AppCompatActivity() {
             allBlogs
         } else {
             allBlogs.filter { post ->
-                val title = post.title.orEmpty()
-                val author = post.author.orEmpty()
-                val content = post.content.orEmpty()
-                title.contains(q, true) || author.contains(q, true) || content.contains(q, true)
+                post.title.orEmpty().contains(q, true) ||
+                        post.author.orEmpty().contains(q, true) ||
+                        post.content.orEmpty().contains(q, true)
             }
         }
         adapter.submit(filtered)
     }
 
     private fun toggleSearch() {
-        if (binding.cardSearchBar.visibility == View.VISIBLE) {
-            closeSearch()
-        } else {
-            openSearch()
-        }
+        if (binding.cardSearchBar.visibility == View.VISIBLE) closeSearch() else openSearch()
     }
 
     private fun openSearch() {
